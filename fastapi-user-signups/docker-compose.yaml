@@ -9,25 +9,56 @@ services:
     environment:
       SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
     ports:
+      # smocker's UI
       - 18888:8081
   marketito:
     image: thiht/smocker
     environment:
       SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
     ports:
+      # smocker's UI
       - 18889:8081
+  prefect:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    command: prefect server start --host 0.0.0.0
+    volumes:
+      - prefect-data:/data
+      - .:/app
+      - ../../prefect/:/prefect
   api:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
     command: python -m fastapi_user_signups
     ports:
       - 8000:8000
     volumes:
       - .:/app
-      - ../../prefect/src/prefect:/usr/local/lib/python3.12/site-packages/prefect
+      - ../../prefect/:/prefect
     depends_on:
+      - prefect
+      - redis
+      - mailboi
+      - marketito
+  tasks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
+    command: python -m fastapi_user_signups.tasks
+    volumes:
+      - .:/app
+      - ../../prefect/:/prefect
+    depends_on:
+      - prefect
       - redis
       - mailboi
       - marketito
@@ -38,13 +69,16 @@ services:
       context: .
       dockerfile: Dockerfile
       target: testing
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
     entrypoint: pytest tests
     volumes:
       - .:/app
-      - ../../prefect/src/prefect:/usr/local/lib/python3.12/site-packages/prefect
+      - ../../prefect/:/prefect
     depends_on:
       - redis
       - mailboi
       - marketito
 volumes:
+  prefect-data: {}
   redis-data: {}
