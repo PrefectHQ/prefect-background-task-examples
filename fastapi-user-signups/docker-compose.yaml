@@ -22,6 +22,8 @@ services:
       dockerfile: Dockerfile
       target: production
     command: prefect server start --host 0.0.0.0
+    environment:
+      PREFECT_HOME: /data
     volumes:
       - prefect-data:/data
       - .:/app
@@ -33,6 +35,7 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
     command: python -m fastapi_user_signups
     ports:
       - 8000:8000
@@ -52,6 +55,7 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
     command: python -m fastapi_user_signups.tasks
     volumes:
       - task-storage:/task-storage
