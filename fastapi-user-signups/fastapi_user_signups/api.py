@@ -1,5 +1,3 @@
-import asyncio
-
 import fastapi
 
 from . import models, tasks
@@ -12,11 +10,8 @@ app = fastapi.FastAPI()
 async def create_user(new_user: NewUser) -> User:
     user = await models.create_user(new_user)
 
-    # TODO: these should say .submit!
-    await asyncio.gather(
-        tasks.send_confirmation_email.submit(user),
-        # tasks.enroll_in_onboarding_flow.submit(user),
-        # tasks.populate_workspace.submit(user),
-    )
+    await tasks.send_confirmation_email.submit(user)
+    await tasks.enroll_in_onboarding_flow.submit(user)
+    await tasks.populate_workspace.submit(user)
 
     return user

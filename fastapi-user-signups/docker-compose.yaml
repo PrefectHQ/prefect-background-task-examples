@@ -9,18 +9,14 @@ services:
     environment:
       SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
     ports:
-      # smocker's UI
-      - 18888:8081
+      - 18888:8081 # smocker's UI
   marketito:
     image: thiht/smocker
     environment:
       SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
     ports:
-      # smocker's UI
-      - 18889:8081
+      - 18889:8081 # smocker's UI
   prefect:
-    environment:
-      PREFECT_LOCAL_STORAGE_PATH: /data
     build:
       context: .
       dockerfile: Dockerfile
@@ -28,6 +24,8 @@ services:
     command: prefect server start --host 0.0.0.0
     ports:
       - "4200:4200"
+    environment:
+      PREFECT_HOME: /data
     volumes:
       - prefect-data:/data
       - .:/app
@@ -39,12 +37,12 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
-      PREFECT_LOCAL_STORAGE_PATH: /data
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
     command: python -m fastapi_user_signups
     ports:
       - 8000:8000
     volumes:
-      - prefect-data:/data
+      - task-storage:/task-storage
       - .:/app
       - ../../prefect/:/prefect
     depends_on:
@@ -59,12 +57,12 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
-      PREFECT_LOCAL_STORAGE_PATH: /data
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
     command: python -m fastapi_user_signups.tasks
     volumes:
+      - task-storage:/task-storage
       - .:/app
       - ../../prefect/:/prefect
-      - prefect-data:/data
     depends_on:
       - prefect
       - redis
@@ -90,3 +88,4 @@ services:
 volumes:
   prefect-data: {}
   redis-data: {}
+  task-storage: {}
