@@ -19,11 +19,15 @@ services:
       # smocker's UI
       - 18889:8081
   prefect:
+    environment:
+      PREFECT_LOCAL_STORAGE_PATH: /data
     build:
       context: .
       dockerfile: Dockerfile
       target: production
     command: prefect server start --host 0.0.0.0
+    ports:
+      - "4200:4200"
     volumes:
       - prefect-data:/data
       - .:/app
@@ -35,10 +39,12 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_LOCAL_STORAGE_PATH: /data
     command: python -m fastapi_user_signups
     ports:
       - 8000:8000
     volumes:
+      - prefect-data:/data
       - .:/app
       - ../../prefect/:/prefect
     depends_on:
@@ -53,10 +59,12 @@ services:
       target: production
     environment:
       PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_LOCAL_STORAGE_PATH: /data
     command: python -m fastapi_user_signups.tasks
     volumes:
       - .:/app
       - ../../prefect/:/prefect
+      - prefect-data:/data
     depends_on:
       - prefect
       - redis
