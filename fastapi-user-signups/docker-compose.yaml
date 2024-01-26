@@ -75,9 +75,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: testing
-    environment:
-      PREFECT_API_URL: http://prefect:4200/api
-    entrypoint: pytest tests
+    entrypoint: pytest tests --asyncio-mode=auto
     volumes:
       - .:/app
       - ../../prefect/:/prefect

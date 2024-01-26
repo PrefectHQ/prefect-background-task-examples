@@ -11,8 +11,8 @@ from .models import User
 mail_templates = jinja2.Environment(enable_async=True)
 welcome_mail = mail_templates.from_string(
     """
-    Hi {{ user.name }}, welcome to the app!
-    """
+Hi {{ user.name }}, welcome to the app!
+"""
 )
 
 
