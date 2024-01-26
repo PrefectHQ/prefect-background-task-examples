@@ -1,9 +1,9 @@
-import time
 from datetime import date
 
 import httpx
 import jinja2
-from prefect import serve, task
+from prefect import task
+from prefect.task_server import serve
 
 from . import models
 from .models import User
@@ -54,10 +54,6 @@ async def populate_workspace(user: User) -> None:
 
 
 if __name__ == "__main__":
-    # TODO: emulate a forever-running task server because `serve` is not yet implemented
-    while True:
-        time.sleep(1)
-
     serve(
         send_confirmation_email,
         enroll_in_onboarding_flow,
