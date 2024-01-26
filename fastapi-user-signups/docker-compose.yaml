@@ -22,6 +22,8 @@ services:
       dockerfile: Dockerfile
       target: production
     command: prefect server start --host 0.0.0.0
+    ports:
+      - "4200:4200"
     environment:
       PREFECT_HOME: /data
     volumes:
