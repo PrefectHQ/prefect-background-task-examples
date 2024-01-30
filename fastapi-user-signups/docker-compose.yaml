@@ -38,6 +38,7 @@ services:
     environment:
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: python -m fastapi_user_signups
     ports:
       - 8000:8000
@@ -51,6 +52,8 @@ services:
       - mailboi
       - marketito
   tasks:
+    deploy:
+      replicas: 2
     build:
       context: .
       dockerfile: Dockerfile
