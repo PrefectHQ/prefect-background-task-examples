@@ -54,8 +54,10 @@ async def populate_workspace(user: User) -> None:
 
 
 if __name__ == "__main__":
+    from . import tasks
+
     serve(
-        send_confirmation_email,
-        enroll_in_onboarding_flow,
-        populate_workspace,
+        tasks.send_confirmation_email,
+        tasks.enroll_in_onboarding_flow,
+        tasks.populate_workspace,
     )

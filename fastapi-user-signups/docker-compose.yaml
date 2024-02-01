@@ -21,11 +21,12 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
+    environment:
+      PREFECT_HOME: /data
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: prefect server start --host 0.0.0.0
     ports:
       - "4200:4200"
-    environment:
-      PREFECT_HOME: /data
     volumes:
       - prefect-data:/data
       - .:/app
