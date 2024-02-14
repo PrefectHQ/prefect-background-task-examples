@@ -1,4 +1,4 @@
-fastapi>=0.106,<=0.107
+fastapi>=0.106,<=0.109.1
 httpx
 jinja2
 git+https://github.com/prefecthq/prefect.git@main

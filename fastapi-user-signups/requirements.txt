@@ -12,7 +12,6 @@ annotated-types==0.6.0
     # via pydantic
 anyio==3.7.1
     # via
-    #   fastapi
     #   httpx
     #   prefect
     #   starlette
@@ -66,7 +65,7 @@ docker==6.1.3
     # via prefect
 email-validator==2.1.0.post1
     # via pydantic
-fastapi==0.106.0
+fastapi==0.109.1
     # via -r requirements.in
 fsspec==2023.12.2
     # via prefect
@@ -241,7 +240,7 @@ sqlalchemy[asyncio]==2.0.25
     #   alembic
     #   prefect
     #   sqlalchemy
-starlette==0.27.0
+starlette==0.35.1
     # via fastapi
 text-unidecode==1.3
     # via python-slugify
