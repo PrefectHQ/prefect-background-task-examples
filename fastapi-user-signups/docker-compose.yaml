@@ -62,6 +62,7 @@ services:
     environment:
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: python -m fastapi_user_signups.tasks
     volumes:
       - task-storage:/task-storage

@@ -25,6 +25,7 @@ asyncpg==0.29.0
 attrs==23.2.0
     # via
     #   jsonschema
+    #   outcome
     #   referencing
 cachetools==5.3.2
     # via
@@ -73,8 +74,14 @@ google-auth==2.26.2
     # via kubernetes
 graphviz==0.20.1
     # via prefect
+greenback==1.2.0
+    # via
+    #   -r requirements.in
+    #   prefect
 greenlet==3.0.3
-    # via sqlalchemy
+    # via
+    #   greenback
+    #   sqlalchemy
 griffe==0.39.1
     # via prefect
 h11==0.14.0
@@ -101,6 +108,8 @@ idna==3.6
     #   email-validator
     #   httpx
     #   requests
+itsdangerous==2.1.2
+    # via prefect
 jinja2==3.1.3
     # via
     #   -r requirements.in
@@ -133,6 +142,8 @@ oauthlib==3.2.2
     #   requests-oauthlib
 orjson==3.9.12
     # via prefect
+outcome==1.3.0.post0
+    # via greenback
 packaging==23.2
     # via
     #   docker
@@ -141,7 +152,7 @@ pathspec==0.12.1
     # via prefect
 pendulum==3.0.0
     # via prefect
-prefect==2.14.16
+prefect @ git+https://github.com/prefecthq/prefect.git@main
     # via -r requirements.in
 pyasn1==0.5.1
     # via
@@ -168,6 +179,8 @@ python-dateutil==2.8.2
     #   pendulum
     #   prefect
     #   time-machine
+python-multipart==0.0.9
+    # via prefect
 python-slugify==8.0.1
     # via prefect
 pytz==2023.3.post1
@@ -220,6 +233,7 @@ sniffio==1.3.0
     # via
     #   anyio
     #   asgi-lifespan
+    #   greenback
     #   httpx
     #   prefect
 sqlalchemy[asyncio]==2.0.25
@@ -228,9 +242,7 @@ sqlalchemy[asyncio]==2.0.25
     #   prefect
     #   sqlalchemy
 starlette==0.27.0
-    # via
-    #   fastapi
-    #   prefect
+    # via fastapi
 text-unidecode==1.3
     # via python-slugify
 time-machine==2.13.0

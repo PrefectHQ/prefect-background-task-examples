@@ -1,7 +1,8 @@
 fastapi>=0.106,<=0.107
 httpx
 jinja2
-prefect>=2.14.16
+git+https://github.com/prefecthq/prefect.git@main
+greenback
 pydantic>=2
 redis
 uvicorn
