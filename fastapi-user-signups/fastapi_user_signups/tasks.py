@@ -1,8 +1,10 @@
+import random
 from datetime import date
 
 import httpx
 import jinja2
 from prefect import task
+from prefect.tasks import task_input_hash
 from prefect.task_server import serve
 
 from . import models
@@ -16,8 +18,11 @@ Hi {{ user.name }}, welcome to the app!
 )
 
 
-@task
+@task(task_run_name="Send Confirmation Email to {user.email}", retries=5)
 async def send_confirmation_email(user: User) -> None:
+    if random.random() < 0.2:
+        raise RuntimeError("Could not send email")
+
     async with httpx.AsyncClient(base_url="http://mailboi") as mailboi:
         response = await mailboi.post(
             "/send-mail",
@@ -30,7 +35,7 @@ async def send_confirmation_email(user: User) -> None:
         assert response.status_code == 666
 
 
-@task
+@task(task_run_name="Enroll {user.email} in Onboarding Flow")
 async def enroll_in_onboarding_flow(user: User) -> None:
     async with httpx.AsyncClient(base_url="http://marketito") as onboarding:
         response = await onboarding.post(
@@ -46,7 +51,10 @@ async def enroll_in_onboarding_flow(user: User) -> None:
         assert response.status_code == 666
 
 
-@task
+@task(
+    task_run_name="Populate Workspace for {user.email}",
+    cache_key_fn=task_input_hash,
+)
 async def populate_workspace(user: User) -> None:
     user = await models.read_user(user.id)
     for i in range(10):
