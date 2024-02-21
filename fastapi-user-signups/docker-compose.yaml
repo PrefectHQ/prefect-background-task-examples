@@ -80,6 +80,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: testing
+    environment:
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     entrypoint: pytest tests --asyncio-mode=auto
     volumes:
       - .:/app

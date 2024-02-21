@@ -77,7 +77,7 @@ async def test_creating_user_schedules_onboarding_tasks(
 @pytest.fixture
 async def onboarding_task_server(
     prefect: PrefectClient,
-) -> Generator[TaskServer, None, None]:
+) -> TaskServer:
     return TaskServer(
         tasks.enroll_in_onboarding_flow,
         tasks.populate_workspace,
@@ -102,9 +102,10 @@ async def test_user_signup_populates_workspace(
     workspace_things = await models.get_things_in_user_workspace(new_user)
     assert len(workspace_things) == 0
 
-    await onboarding_task_server.run_once()
+    for task in onboarding_task_server.tasks:
+        task_run = await task.submit(new_user)
+        await onboarding_task_server.execute_task_run(task_run)
 
-    workspace_things = await models.get_things_in_user_workspace(new_user)
     assert len(workspace_things) == 10
 
 
@@ -113,8 +114,10 @@ async def test_user_signup_sends_confirmation_email(
 ):
     httpx_mock.add_response(url="http://mailboi/send-mail", status_code=666)
 
-    await onboarding_task_server.run_once()
-
+    for task in onboarding_task_server.tasks:
+        task_run = await task.submit(new_user)
+        await onboarding_task_server.execute_task_run(task_run)
+    
     request = httpx_mock.get_request(url="http://mailboi/send-mail")
     assert request
 
@@ -130,8 +133,10 @@ async def test_user_signup_enrolls_user_in_onboarding_flow(
 ):
     httpx_mock.add_response(url="http://marketito/enroll-user", status_code=666)
 
-    await onboarding_task_server.run_once()
-
+    for task in onboarding_task_server.tasks:
+        task_run = await task.submit(new_user)
+        await onboarding_task_server.execute_task_run(task_run)
+    
     request = httpx_mock.get_request(url="http://marketito/enroll-user")
     assert request
 
