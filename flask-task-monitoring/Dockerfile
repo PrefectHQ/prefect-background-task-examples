@@ -13,7 +13,7 @@ RUN pip install -r /tmp/requirements.txt
 RUN pip install -e /prefect/
 
 WORKDIR /app
-COPY ./fastapi_user_signups /app/fastapi_user_signups
+COPY ./flask_task_monitoring /app/flask_task_monitoring
 
 FROM production as testing
 
