@@ -30,8 +30,14 @@ class HostileQuestion(Exception):
 
 
 @task(
+    # This task will be retried up to 10 times, with a 1 second delay between retries.
+    # https://docs.prefect.io/latest/concepts/tasks/#retries
     retries=10,
     retry_delay_seconds=1,
+    # Results of this task will be cached for 60 seconds, and the cache key will be
+    # determined by the parameters to the task.  This means that if the same question is
+    # asked multiple times within a minute, the same results will be returned without
+    # making API calls to the LLM.
     cache_key_fn=task_input_hash,
     cache_expiration=timedelta(seconds=60),
 )
@@ -46,6 +52,9 @@ async def get_help(question: str) -> bytes:
         raise ValueError("Randomly failing, this should be retried")
 
     audio = await marvin.speak_async(reply)
+
+    # The return value of this task are the bytes of the audio file, which will be
+    # encoded in MP3 format.
     return audio.read()
 
 
