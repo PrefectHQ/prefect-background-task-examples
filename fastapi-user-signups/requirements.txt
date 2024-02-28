@@ -56,7 +56,7 @@ coolname==2.2.0
     # via prefect
 croniter==2.0.1
     # via prefect
-cryptography==42.0.2
+cryptography==42.0.4
     # via prefect
 dateparser==1.2.0
     # via prefect
