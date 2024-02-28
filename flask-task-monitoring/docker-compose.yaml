@@ -1,21 +1,5 @@
 version: '3.8'
 services:
-  redis:
-    image: redis:7-alpine
-    volumes:
-      - redis-data:/data
-  mailboi:
-    image: thiht/smocker
-    environment:
-      SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
-    ports:
-      - 18888:8081 # smocker's UI
-  marketito:
-    image: thiht/smocker
-    environment:
-      SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
-    ports:
-      - 18889:8081 # smocker's UI
   prefect:
     build:
       context: .
@@ -26,7 +10,7 @@ services:
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: prefect server start --host 0.0.0.0
     ports:
-      - "14200:4200"
+      - "14201:4200"
     volumes:
       - prefect-data:/data
       - .:/app
@@ -37,21 +21,19 @@ services:
       dockerfile: Dockerfile
       target: production
     environment:
+      PYTHONUNBUFFERED: 1
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
-    command: python -m fastapi_user_signups
+    command: flask --app flask_task_monitoring.api run --host 0.0.0.0 --port 8001 --debug
     ports:
-      - 8000:8000
+      - 8001:8001
     volumes:
       - task-storage:/task-storage
       - .:/app
       - ../../prefect/:/prefect
     depends_on:
       - prefect
-      - redis
-      - mailboi
-      - marketito
   tasks:
     deploy:
       replicas: 2
@@ -63,16 +45,17 @@ services:
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
-    command: python -m fastapi_user_signups.tasks
+    env_file:
+      # Should include an OPENAI_API_KEY
+      - path: ./.openai.env
+        required: true
+    command: python -m flask_task_monitoring.tasks
     volumes:
       - task-storage:/task-storage
       - .:/app
       - ../../prefect/:/prefect
     depends_on:
       - prefect
-      - redis
-      - mailboi
-      - marketito
   tests:
     deploy:
       replicas: 0
@@ -84,11 +67,6 @@ services:
     volumes:
       - .:/app
       - ../../prefect/:/prefect
-    depends_on:
-      - redis
-      - mailboi
-      - marketito
 volumes:
   prefect-data: {}
-  redis-data: {}
   task-storage: {}

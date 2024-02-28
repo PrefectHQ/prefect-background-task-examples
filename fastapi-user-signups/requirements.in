@@ -1,7 +1,7 @@
+git+https://github.com/prefecthq/prefect.git@main
 fastapi>=0.106,<=0.107
 httpx
 jinja2
-git+https://github.com/prefecthq/prefect.git@main
 greenback
 pydantic>=2
 redis
