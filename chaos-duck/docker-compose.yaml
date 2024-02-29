@@ -9,6 +9,7 @@ services:
     environment:
       PREFECT_HOME: /data
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
+      PREFECT_LOGGING_SERVER_LEVEL: INFO
     command: prefect server start --host 0.0.0.0
     ports:
       - "14202:4200"

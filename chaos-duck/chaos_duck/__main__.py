@@ -44,7 +44,7 @@ async def main(iterations: int):
     if iterations % 10 != 0:
         print("Submitted", iterations, "tasks in", submission_duration, "seconds")
 
-    task_results: Counter[StateType] = Counter()
+    task_results: Counter[tuple[StateType, str]] = Counter()
     observed_retries: Counter[UUID] = Counter()
     polling_failures, result_failures = 0, 0
 
@@ -65,8 +65,8 @@ async def main(iterations: int):
                 polling_failures += 1
                 continue
 
-            summary: Counter[StateType] = Counter(
-                run.state.type for run in runs if run.state.type not in FINAL_STATES
+            summary: Counter[tuple[StateType, str]] = Counter(
+                (run.state.type, run.state.name) for run in runs
             )
 
             for run in runs:
@@ -90,13 +90,15 @@ async def main(iterations: int):
                     assert reply == "pong", f"Expected 'pong', got {reply}"
 
                 if run.state.type in FINAL_STATES:
-                    task_results[run.state.type] += 1
+                    task_results[(run.state.type, run.state.name)] += 1
                     del task_runs[run.id]
 
-            summary_report = ", ".join(
-                f"{count} {state.name}" for state, count in sorted(summary.items())
-            )
-            print(f"{len(task_runs)} task runs remaining, {summary_report}")
+            if task_runs:
+                summary_report = ", ".join(
+                    f"{count} {type.value}:{name}"
+                    for (type, name), count in sorted(summary.items())
+                )
+                print(f"{len(task_runs)} task runs remaining, {summary_report}")
 
     duration = time.monotonic() - start
 
