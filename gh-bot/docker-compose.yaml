@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  api:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      PYTHONUNBUFFERED: 1
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
+      PREFECT_LOGGING_LEVEL: DEBUG
+    env_file: .env
+    command: uvicorn gh_bot.api:app --host 0.0.0.0 --port 8001
+    ports:
+      - 8001:8001
+    volumes:
+      - task-storage:/task-storage
+      - .:/app
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+
+  tasks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
+      PREFECT_LOGGING_LEVEL: DEBUG
+    env_file: .env
+    command: python gh_bot/tasks.py
+    volumes:
+      - task-storage:/task-storage
+      - .:/app
+
+  tests:
+    deploy:
+      replicas: 0
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    entrypoint: pytest tests --asyncio-mode=auto
+    volumes:
+      - .:/app
+      - ../../prefect/:/prefect
+    env_file: .env
+volumes:
+  prefect-data: {}
+  task-storage: {}

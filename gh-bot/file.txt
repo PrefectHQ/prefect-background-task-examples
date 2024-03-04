@@ -1,0 +1,9 @@
+foo\n
+foo\n
+foo\n
+foo\n
+foo\n
+foo\n
+foo\n
+bar\n
+baz\n
