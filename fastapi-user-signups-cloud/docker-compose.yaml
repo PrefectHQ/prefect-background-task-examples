@@ -35,7 +35,7 @@ services:
       - marketito
   tasks:
     deploy:
-      replicas: 2
+      replicas: 3
     build:
       context: .
       dockerfile: Dockerfile
