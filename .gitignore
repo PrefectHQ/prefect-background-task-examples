@@ -1,3 +1,6 @@
 **/.bookkeeping
 .python-version
 __pycache__
+
+.env*
+**/.env*

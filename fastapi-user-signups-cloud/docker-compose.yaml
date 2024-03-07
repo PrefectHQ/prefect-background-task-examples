@@ -1,0 +1,68 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+  mailboi:
+    image: thiht/smocker
+    environment:
+      SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
+    ports:
+      - 18888:8081 # smocker's UI
+  marketito:
+    image: thiht/smocker
+    environment:
+      SMOCKER_MOCK_SERVER_LISTEN_PORT: "80"
+    ports:
+      - 18889:8081 # smocker's UI
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    env_file:
+      - .env
+    command: python -m fastapi_user_signups
+    ports:
+      - 8000:8000
+    volumes:
+      - task-storage:/task-storage
+      - .:/app
+    depends_on:
+      - redis
+      - mailboi
+      - marketito
+  tasks:
+    deploy:
+      replicas: 2
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    env_file:
+      - .env
+    command: python -m fastapi_user_signups.tasks
+    volumes:
+      - task-storage:/task-storage
+      - .:/app
+    depends_on:
+      - redis
+      - mailboi
+      - marketito
+  tests:
+    deploy:
+      replicas: 0
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    entrypoint: pytest tests --asyncio-mode=auto
+    volumes:
+      - .:/app
+    depends_on:
+      - mailboi
+      - marketito
+volumes:
+  redis-data: {}
+  task-storage: {}
