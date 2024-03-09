@@ -35,6 +35,26 @@ If you submit the task for background execution, you'll run a Task Server in a s
 process or container to execute the task. This is similar to how you would run a Celery
 worker or an arq worker to execute background tasks.
 
+### This Feature is Experimental
+
+Historically, tasks in Prefect could only be called within a
+[flow](https://docs.prefect.io/latest/concepts/flows/). Flows have a set of features
+similar to "Canvas" workflows in Celery or Directed Acyclic Graphs (DAGs) in batch
+processing systems such as Airflow.
+
+Calling and submitting tasks outside of flows is currently **experimental**.
+To use this feature, set the `PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING` setting to `true`:
+
+```bash
+prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
+```
+
+**NOTE**: With this setting turned on, you can use tasks without flows both when using an open-source Prefect API server and with Prefect Cloud.
+
+The Prefect team is actively working on this feature and would love to hear your feedback.
+Let us know what you think in the [Prefect Community Slack](https://communityinviter.com/apps/prefect-community/prefect-community).
+
+
 ### Defining a Task
 
 Add the `@task` decorator to a Python function to define a Prefect task. Here's an
@@ -84,7 +104,7 @@ Tasks documentation](https://docs.prefect.io/latest/concepts/tasks/).
 
 ### Executing Background Tasks with a Task Server
 
-To run tasks in a separate process or container, you'll start a Task Server, similar to
+To run tasks in a separate process or container, you'll need to start a Task Server, similar to
 how you would run a Celery worker or an arq worker.
 
 The Task Server will continually receive submitted tasks to execute from Prefect's API,
@@ -92,9 +112,6 @@ execute them, and report the results back to the API. You can run a Task Server 
 tasks into the `prefect.task_server.serve()` method, like so:
 
 ```python
-"""
-tasks.py: Prefect task definitions for a web app.
-"""
 from prefect import task
 from prefect.task_server import serve
 
@@ -113,7 +130,10 @@ if __name__ == "__main__":
     serve(tasks.my_background_task)
 ```
 
-Once this file exists, you can run the Task Server with `python tasks.py`.
+Once this file exists, you can use it to run the Task Server. If the name of the file is
+`tasks.py`, you'll run `python tasks.py`. The Task Server should start and begin listening
+for submitting tasks. If tasks were submitted before the Task Server started, it will
+begin processing them.
 
 ## Getting Started with the Example Applications
 
