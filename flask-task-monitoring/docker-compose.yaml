@@ -14,7 +14,6 @@ services:
     volumes:
       - prefect-data:/data
       - .:/app
-      - ../../prefect/:/prefect
   api:
     build:
       context: .
@@ -31,7 +30,6 @@ services:
     volumes:
       - task-storage:/task-storage
       - .:/app
-      - ../../prefect/:/prefect
     depends_on:
       - prefect
   tasks:
@@ -53,7 +51,6 @@ services:
     volumes:
       - task-storage:/task-storage
       - .:/app
-      - ../../prefect/:/prefect
     depends_on:
       - prefect
   tests:
@@ -66,7 +63,6 @@ services:
     entrypoint: pytest tests --asyncio-mode=auto
     volumes:
       - .:/app
-      - ../../prefect/:/prefect
 volumes:
   prefect-data: {}
   task-storage: {}

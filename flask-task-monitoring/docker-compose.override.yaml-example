@@ -1,0 +1,16 @@
+# If you rename this file to docker-compose.override.yaml, it will extend the
+# example's containers to mount your local `prefect` working tree into the containers
+version: '3.8'
+services:
+  prefect:
+    volumes:
+      - ../../prefect/:/prefect
+  api:
+    volumes:
+      - ../../prefect/:/prefect
+  tasks:
+    volumes:
+      - ../../prefect/:/prefect
+  tests:
+    volumes:
+      - ../../prefect/:/prefect

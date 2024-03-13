@@ -7,11 +7,18 @@ virtualenvs:
 	done
 
 all:
+	$(MAKE) -C chaos-duck $@
 	$(MAKE) -C fastapi-user-signups $@
+	$(MAKE) -C flask-task-monitoring $@
 
 clean:
+	$(MAKE) -C chaos-duck $@
 	$(MAKE) -C fastapi-user-signups $@
+	$(MAKE) -C flask-task-monitoring $@
 
 tests:
+	$(MAKE) -C chaos-duck $@
 	$(MAKE) -C fastapi-user-signups $@
+	$(MAKE) -C flask-task-monitoring $@
+
 test: tests

@@ -19,11 +19,9 @@ annotated-types==0.6.0
 anyio==3.7.1
     # via
     #   -r requirements.txt
-    #   fastapi
     #   httpx
     #   prefect
-    #   starlette
-apprise==1.7.2
+apprise==1.7.4
     # via
     #   -r requirements.txt
     #   prefect
@@ -33,10 +31,6 @@ asgi-lifespan==2.1.0
     #   prefect
 asttokens==2.4.1
     # via stack-data
-async-timeout==4.0.3
-    # via
-    #   -r requirements.txt
-    #   redis
 asyncpg==0.29.0
     # via
     #   -r requirements.txt
@@ -45,7 +39,6 @@ attrs==23.2.0
     # via
     #   -r requirements.txt
     #   jsonschema
-    #   outcome
     #   referencing
 cachetools==5.3.3
     # via
@@ -87,7 +80,7 @@ coolname==2.2.0
     # via
     #   -r requirements.txt
     #   prefect
-croniter==2.0.1
+croniter==2.0.2
     # via
     #   -r requirements.txt
     #   prefect
@@ -117,13 +110,11 @@ execnet==2.0.2
     # via pytest-xdist
 executing==2.0.1
     # via stack-data
-fastapi==0.107.0
-    # via -r requirements.txt
 fsspec==2024.2.0
     # via
     #   -r requirements.txt
     #   prefect
-google-auth==2.28.1
+google-auth==2.28.2
     # via
     #   -r requirements.txt
     #   kubernetes
@@ -131,14 +122,11 @@ graphviz==0.20.1
     # via
     #   -r requirements.txt
     #   prefect
-greenback==1.2.1
-    # via -r requirements.txt
 greenlet==3.0.3
     # via
     #   -r requirements.txt
-    #   greenback
     #   sqlalchemy
-griffe==0.41.0
+griffe==0.42.0
     # via
     #   -r requirements.txt
     #   prefect
@@ -179,7 +167,7 @@ idna==3.6
     #   requests
 iniconfig==2.0.0
     # via pytest
-ipython==8.22.1
+ipython==8.22.2
     # via -r requirements-dev.in
 itsdangerous==2.1.2
     # via
@@ -243,11 +231,7 @@ orjson==3.9.15
     # via
     #   -r requirements.txt
     #   prefect
-outcome==1.3.0.post0
-    # via
-    #   -r requirements.txt
-    #   greenback
-packaging==23.2
+packaging==24.0
     # via
     #   -r requirements.txt
     #   docker
@@ -288,10 +272,9 @@ pycparser==2.21
     # via
     #   -r requirements.txt
     #   cffi
-pydantic[email]==2.6.3
+pydantic[email]==2.6.4
     # via
     #   -r requirements.txt
-    #   fastapi
     #   prefect
     #   pydantic
 pydantic-core==2.16.3
@@ -303,19 +286,19 @@ pygments==2.17.2
     #   -r requirements.txt
     #   ipython
     #   rich
-pytest==8.0.2
+pytest==8.1.1
     # via
     #   -r requirements-dev.in
     #   pytest-asyncio
     #   pytest-httpx
     #   pytest-xdist
-pytest-asyncio==0.23.5
+pytest-asyncio==0.23.5.post1
     # via -r requirements-dev.in
 pytest-httpx==0.30.0
     # via -r requirements-dev.in
 pytest-xdist==3.5.0
     # via -r requirements-dev.in
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
     # via
     #   -r requirements.txt
     #   croniter
@@ -348,8 +331,6 @@ readchar==4.0.5
     # via
     #   -r requirements.txt
     #   prefect
-redis==5.0.2
-    # via -r requirements.txt
 referencing==0.33.0
     # via
     #   -r requirements.txt
@@ -366,7 +347,7 @@ requests==2.31.0
     #   docker
     #   kubernetes
     #   requests-oauthlib
-requests-oauthlib==1.3.1
+requests-oauthlib==1.4.0
     # via
     #   -r requirements.txt
     #   apprise
@@ -396,7 +377,7 @@ ruamel-yaml-clib==0.2.8
     # via
     #   -r requirements.txt
     #   ruamel-yaml
-ruff==0.2.2
+ruff==0.3.2
     # via -r requirements-dev.in
 six==1.16.0
     # via
@@ -410,10 +391,9 @@ sniffio==1.3.1
     #   -r requirements.txt
     #   anyio
     #   asgi-lifespan
-    #   greenback
     #   httpx
     #   prefect
-sqlalchemy[asyncio]==2.0.27
+sqlalchemy[asyncio]==2.0.28
     # via
     #   -r requirements.txt
     #   alembic
@@ -421,15 +401,11 @@ sqlalchemy[asyncio]==2.0.27
     #   sqlalchemy
 stack-data==0.6.3
     # via ipython
-starlette==0.28.0
-    # via
-    #   -r requirements.txt
-    #   fastapi
 text-unidecode==1.3
     # via
     #   -r requirements.txt
     #   python-slugify
-time-machine==2.13.0
+time-machine==2.14.0
     # via
     #   -r requirements.txt
     #   pendulum
@@ -437,7 +413,7 @@ toml==0.10.2
     # via
     #   -r requirements.txt
     #   prefect
-traitlets==5.14.1
+traitlets==5.14.2
     # via
     #   ipython
     #   matplotlib-inline
@@ -450,7 +426,6 @@ typing-extensions==4.10.0
     #   -r requirements.txt
     #   aiosqlite
     #   alembic
-    #   fastapi
     #   prefect
     #   pydantic
     #   pydantic-core
@@ -474,7 +449,7 @@ urllib3==2.2.1
     #   docker
     #   kubernetes
     #   requests
-uvicorn==0.27.1
+uvicorn==0.28.0
     # via
     #   -r requirements.txt
     #   prefect
