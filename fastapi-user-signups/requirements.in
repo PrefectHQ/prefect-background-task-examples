@@ -1,4 +1,4 @@
-git+https://github.com/prefecthq/prefect.git@main
+prefect>=2.16.3
 fastapi>=0.106,<=0.107
 httpx
 jinja2

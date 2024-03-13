@@ -9,14 +9,30 @@ services:
     environment:
       PREFECT_HOME: /data
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
-      PREFECT_LOGGING_SERVER_LEVEL: INFO
     command: prefect server start --host 0.0.0.0
     ports:
       - "14202:4200"
     volumes:
       - prefect-data:/data
       - .:/app
-      - ../../prefect/:/prefect
+  tasks:
+    deploy:
+      replicas: 4
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      PREFECT_API_URL: http://prefect:4200/api
+      PREFECT_LOCAL_STORAGE_PATH: /task-storage
+      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
+    command: python -m chaos_duck.tasks
+    volumes:
+      - task-storage:/task-storage
+      - .:/app
+    depends_on:
+      - prefect
   duck:
     deploy:
       replicas: 0
@@ -35,26 +51,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - task-storage:/task-storage
       - .:/app
-      - ../../prefect/:/prefect
-    depends_on:
-      - prefect
-  tasks:
-    deploy:
-      replicas: 4
-    restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: production
-    environment:
-      PREFECT_API_URL: http://prefect:4200/api
-      PREFECT_LOCAL_STORAGE_PATH: /task-storage
-      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
-    command: python -m chaos_duck.tasks
-    volumes:
-      - task-storage:/task-storage
-      - .:/app
-      - ../../prefect/:/prefect
     depends_on:
       - prefect
 volumes:

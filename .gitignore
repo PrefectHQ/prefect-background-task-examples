@@ -1,3 +1,4 @@
 **/.bookkeeping
+**/docker-compose.override.yaml
 .python-version
 __pycache__

@@ -1,2 +1,2 @@
-git+https://github.com/prefecthq/prefect.git@main
+prefect>=2.16.3
 docker
