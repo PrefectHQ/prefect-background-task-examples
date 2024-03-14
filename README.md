@@ -5,7 +5,7 @@ run background tasks. The examples include a FastAPI application that processes 
 signups and a Flask application that handles image uploads. Each example is
 self-contained, can be run locally, and includes automated tests.
 
-## Why Prefect instead of Celery or arq?
+## Why Prefect instead of Celery or RQ?
 
 If you are familiar with tools like Celery and arq, Prefect offers a similar Pythonic
 interface for defining and running tasks, paired with a robust set of features:
