@@ -123,11 +123,9 @@ def my_background_task(name: str):
 
 
 if __name__ == "__main__":
-    from . import tasks
-
     # NOTE: The serve() function accepts multiple tasks. The Task Server 
     # will listen for submitted task runs for all tasks passed in.
-    serve(tasks.my_background_task)
+    serve(my_background_task)
 ```
 
 Once this file exists, you can use it to run the Task Server. If the name of the file is
