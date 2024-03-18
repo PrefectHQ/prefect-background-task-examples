@@ -8,8 +8,6 @@ Prefect tasks are a great way to quickly execute discrete units of work in backg
 For example, if you have a web app, you can use tasks to offload processes such as sending emails, processing images, or inserting data into a database.
 With Prefect, you can run tasks in parallel, cache return values, configure automatic retries, and more, with a simple interface that scales up to complex workflows that need dynamic infrastructure.
 
-## Why Prefect instead of Celery or arq?
-
 If you are familiar with tools like Celery and arq, Prefect offers a similar Pythonic interface for defining and running tasks, plus a host of other benefits including:
 
 - Support for asynchronous and synchronous Python
