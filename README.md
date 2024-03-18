@@ -5,9 +5,9 @@ run background tasks. The examples include a FastAPI application that processes 
 signups and a Flask application that handles image uploads. Each example is
 self-contained, can be run locally, and includes automated tests.
 
-## Why Prefect instead of Celery or arq?
+## Why Prefect for Background Tasks?
 
-If you are familiar with tools like Celery and arq, Prefect offers a similar Pythonic
+If you are familiar with Python background task tools like Celery, RQ, and arq, Prefect offers a similar Pythonic
 interface for defining and running tasks, paired with a robust set of features:
 
 - Support for asynchronous and synchronous Python
@@ -22,23 +22,23 @@ interface for defining and running tasks, paired with a robust set of features:
   without managing infrastructure, and a self-hosted Cloud offering
 - A growing ecosystem of integrations
 
-Next, we'll provide a brief introduction to defining and running tasks with Prefect.
+Next, we'll give a brief introduction to defining and running tasks with Prefect.
 
 ## Using Tasks
 
 Prefect tasks are Python functions that can be run immediately or submitted for background
-execution, similar to arq or Celery tasks. You define a task by adding the `@task`
+execution, similar to RQ or Celery tasks. You define a task by adding the `@task`
 decorator to a Python function, after which you can use one of several methods to run the
 task.
 
-If you submit the task for background execution, you'll run a Task Server in a separate
-process or container to execute the task. This is similar to how you would run a Celery
-worker or an arq worker to execute background tasks.
+If you submit the task for background execution, you'll also run a Task Server in a 
+separate process or container to execute the task. This is similar to running a Celery 
+worker to execute Celery tasks.
 
 ### This Feature is Experimental
 
 Historically, tasks in Prefect could only be called within a
-[flow](https://docs.prefect.io/latest/concepts/flows/). Flows have a set of features
+[flow](https://docs.prefect.io/latest/concepts/flows/) (think _workflow_). Flows have features
 similar to "Canvas" workflows in Celery or Directed Acyclic Graphs (DAGs) in batch
 processing systems such as Airflow.
 
@@ -49,7 +49,7 @@ To use this feature, set the `PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING` setti
 prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
 ```
 
-**NOTE**: With this setting turned on, you can use tasks without flows both when using an open-source Prefect API server and with Prefect Cloud.
+**NOTE**: With this setting turned on, you can use tasks without flows when using an open-source Prefect API server and with Prefect Cloud.
 
 The Prefect team is actively working on this feature and would love to hear your feedback.
 Let us know what you think in the [Prefect Community Slack](https://communityinviter.com/apps/prefect-community/prefect-community).
