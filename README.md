@@ -6,7 +6,7 @@ See the [Tutorial](./tutorial/) for step-by-step instructions showing progressiv
 ## Why use Prefect background tasks?
 
 Prefect background tasks are a great way to quickly execute discrete units of work in background processes.
-For example, if you have a web app, you can use Prefect background tasks to offload processes such as sending emails, processing images, or inserting data into a database.
+For example, if you have a web app, you can use tasks to offload processes such as sending emails, processing images, or inserting data into a database.
 Prefect background tasks are ideal for a microservices architecture, where you have a number of small, independent services that need to communicate with each other.
 With Prefect, you can run tasks in parallel, cache return values, configure automatic retries, and more, with a simple interface that scales up to complex workflows that need dynamic infrastructure.
 
