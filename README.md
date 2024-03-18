@@ -161,7 +161,7 @@ python greeter.py
 
 You should see the task run in the terminal.
 
-Optional:
+#### Optional:
 
 You can see the task run in the UI (when the task run page is implemented - coming soon!).
 If you're using a self-hosted Prefect Server instance, you can also see the task runs in the database.
