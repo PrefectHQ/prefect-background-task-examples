@@ -109,7 +109,7 @@ If using Prefect Cloud, set the `PREFECT_API_URL` value to the Prefect Cloud API
 
 The examples that use docker (examples 4 and 5) use a local Prefect server instance by default.
 You can switch to Prefect Cloud by changing the `PREFECT_API_URL` and adding a variable for your API key in the `docker-compose.yaml`.
-Or use a local server instance backed by a PostgreSQL database by setting the `PREFECT__DATABASE__CONNECTION_URL`.
+Or use a local server instance backed by a PostgreSQL database by setting the `PREFECT_API_DATABASE_CONNECTION_URL`.
 
 If using a local Prefect server instance instead of Prefect Cloud, start your server by running the following command:
 
