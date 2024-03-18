@@ -1,8 +1,8 @@
 # Exploring Prefect Background Task Examples
 
-This tutorial will familiarize you with Prefect background tasks and task servers.
+This tutorial will familiarize you with Prefect tasks and task servers.
 
-In this tutorial, we'll explore increasingly realistic examples of using Prefect background tasks.
+In this tutorial, we'll explore increasingly realistic examples of using Prefect tasks.
 
 We'll start by running a Prefect task outside of a flow.
 Previously, Prefect tasks could only be run inside a flow.
@@ -52,11 +52,11 @@ pip install -U prefect marvin fastapi==0.107
 prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
 ```
 
-### Step 4: Connect to Prefect Cloud or a local Prefect server instance
+### Step 4: Connect to Prefect Cloud or a local Prefect server instance (If not set already)
 
 You can use either Prefect Cloud or a local Prefect server instance for these examples.
 
-You need to have `PREFECT_API_URL`set to use background task servers.
+You need to have `PREFECT_API_URL`set to submit tasks to task servers.
 
 If you're using a local Prefect server instance with a SQLite backing database (the default database), you can save this value to your active Prefect Profile by running the following command in your terminal.
 
@@ -96,7 +96,7 @@ Alright, let's run some tasks!
 
 Add the `@task` decorator to any Python function to define a Prefect task.
 
-Step 1: Create a file named `greeter.py` and save the following code in it.
+Step 1: Create a file named `greeter.py` and save the following code in it, or run the existing file in the [tutorial directory](./tutorial).
 
 ```python
 from prefect import task 
@@ -122,8 +122,8 @@ Optional:
 You can see the task run in the UI (when the task run page is implemented - coming soon!).
 If you're using a self-hosted Prefect Server instance, you can also see the task runs in the database.
 
-If yo want to inspect the SQLite database, use your favorite interface.
-We show how to use *DB Browser for SQLite* below.
+If you want to inspect the SQLite database, use your favorite interface.
+We explain how to use *DB Browser for SQLite* below.
 
 Download it [here](https://sqlitebrowser.org/dl/), if needed. Install it and open it.
 
@@ -167,7 +167,7 @@ Step 2: Start the task server by running the script in the terminal.
 python task_server.py
 ```
 
-The task server is now waiting for runs of the my_background_task task.
+The task server is now waiting for runs of the `my_background_task` task.
 Let's give it some task runs.
 
 Step 3: Create a file named `task_submitter.py` and save the following code in it.
@@ -241,7 +241,7 @@ The first is a basic hello world route at the root URL to confirm that the FastA
 The second route, `/task`, will submit a task to the Prefect task server when the URL is hit and return information about the submitted task.
 You could name this route whatever you like.
 
-Here are the contents of [first_fastapi.py](./first_fastapi.py)
+Here are the contents of [first_fastapi.py](./tutorial/first_fastapi.py)
 
 ```python
 from fastapi import FastAPI
@@ -270,7 +270,7 @@ async def prefect_task():
 
 Step 2: Define a Prefect task server in a Python file.
 
-Here are the contents of [ff_prefect_task_server.py](./ff_prefect_task_server.py)
+Here are the contents of [ff_prefect_task_server.py](./tutorial/ff_prefect_task_server.py)
 
 ```python
 from prefect import task
@@ -316,17 +316,17 @@ Next, let's use Docker containers with more advanced workflows to move toward pr
 The following example will simulate a new user signup workflow with multiple services.
 We'll run a Prefect server instance, a Prefect task server, and a FastAPI server in separate Docker containers.
 
-All the code files for this example live in the [`fastapi-user-signups` directory](../fastapi-user-signups).
+All the code files for this example live in the [`fastapi-user-signups` directory](./tutorial/fastapi-user-signups).
 We've defined the FastAPI server, model, and tasks in Python files.
 The Makefile and docker-compose files are used to wire everything together.
 
 Step 1: Upgrade Docker to the latest version, if you aren't already using it.
 
-Step 2: Move into the [`fastapi-user-signups` directory](../fastapi-user-signups/).
+Step 2: Move into the [`fastapi-user-signups` directory](./tutorial/fastapi-user-signups/).
 
 Step 3: Run `make` to build the Docker images.
 
-Step 4: Run `docker compose up` to fire everyting up.
+Step 4: Run `docker compose up` to fire everything up.
 
 The services should start and everything should run.
 If you have issues and do some troubleshooting, you can then run the following commands to try to rebuild and fire up the services.
@@ -385,7 +385,7 @@ Have fun asking Marvin other questions.
 ## Next steps
 
 Way to go!
-You've seen how to use Prefect to run background tasks with a Prefect task server and several web servers.
+You've seen how to use Prefect to run tasks in the background with a Prefect task server and several web servers.
 
-There's lots more you can do with Prefect background tasks.
+There's lots more you can do with Prefect tasks.
 We can't wait to see what you build!
