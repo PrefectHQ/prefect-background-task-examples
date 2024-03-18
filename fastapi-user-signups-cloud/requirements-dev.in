@@ -1,0 +1,6 @@
+ipython
+pytest
+pytest-asyncio
+pytest-httpx
+pytest-xdist
+ruff
