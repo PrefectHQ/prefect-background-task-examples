@@ -140,7 +140,7 @@ Let's run some tasks!
 
 Add the `@task` decorator to any Python function to define a Prefect task.
 
-Step 1: Create a file named `greeter.py` and save the following code in it, or run the existing file in the [tutorial directory](./tutorial).
+Step 1: Create a file named `greeter.py` and save the following code in it, or run the existing file in the [basic-examples directory](./basic-examples).
 
 ```python
 from prefect import task 
@@ -203,7 +203,7 @@ def my_background_task(name: str):
 
 
 if __name__ == "__main__":
-    # if on prefect 2.16.4 or older add the following line
+    # if using prefect 2.16.4 or older add the following line
     # from task_server import my_background_task
 
     serve(my_background_task)
@@ -212,7 +212,7 @@ if __name__ == "__main__":
 Step 2: Start the task server by running the script in the terminal.
 
 ```bash
-python task_server.py
+python tasks.py
 ```
 
 The task server is now waiting for runs of the `my_background_task` task.
@@ -221,10 +221,10 @@ Let's give it some task runs.
 Step 3: Create a file named `task_submitter.py` and save the following code in it.
 
 ```python
-from task_server import my_b_task
+from tasks import my_background_task
 
 if __name__ == "__main__":
-    val = my_b_task.submit("Agrajag")
+     = my_background_task.submit("Agrajag")
     print(val)
 ```
 
@@ -254,7 +254,7 @@ Step 6: You can use multiple task servers to run tasks in parallel.
 Start another instance of the task server. In another terminal run:
 
 ```bash
-python task_server.py
+python tasks.py
 ```
 
 Step 7: Submit multiple tasks to the task server with `map`.
@@ -262,10 +262,10 @@ Step 7: Submit multiple tasks to the task server with `map`.
 Modify the `task_submitter.py` file to submit multiple tasks to the task server with different inputs by using the `map` method.
 
 ```python
-from task_server import my_b_task
+from task_server import my_background_task
 
 if __name__ == "__main__":
-    my_b_task.map(["Ford", "Prefect", "Slartibartfast"])
+    my_background_task.map(["Ford", "Prefect", "Slartibartfast"])
 ```
 
 Run the file and watch the work get distributed across both task servers!
@@ -287,46 +287,40 @@ Step 1: Define API routes for the FastAPI server in a Python file.
 
 Let's define two routes for our FastAPI server.
 The first is a basic hello world route at the root URL to confirm that the FastAPI server is working.
-The second route, `/task`, will submit a task to the Prefect task server when the URL is hit and return information about the submitted task.
-You could name this route whatever you like.
+The second route, `/task`, will submit a task to the Prefect task server when the `http://127.0.0.1:8000/task` URL is hit and return information about the submitted task.
 
-Here are the contents of [first_fastapi.py](./tutorial/first_fastapi.py)
+Here are the contents of [first_fastapi.py](./basic-examples/first_fastapi.py)
 
 ```python
 from fastapi import FastAPI
 from prefect import task
-from first_fastapi_task_server import my_fastapi_task
+from fastapi_tasks import my_fastapi_task
 
 app = FastAPI()
 
 
-@task
-def my_b_task(name: str):
-    print(f"Hello, {name}!")
-    return f"Hello, {name}!"
-
-
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+def greet():
+    print(f"Hello, world!")
+    return f"Hello, world!"
 
 
 @app.get("/task")
 async def prefect_task():
-    val = my_fastapi_task.submit(name="Marvin")
-    return {"message": f"Prefect Task submitted: {val}"}
+    data = my_fastapi_task.submit(name="Trillian")
+    return {"message": f"Prefect Task submitted: {data}"}
 ```
 
 Step 2: Define a Prefect task server in a Python file.
 
-Here are the contents of [ff_prefect_task_server.py](./tutorial/ff_prefect_task_server.py)
+Here are the contents of [fastapi_tasks.py](./basic-examples/fastapi_tasks_server.py)
 
 ```python
 from prefect import task
 from prefect.task_server import serve
 
 
-@task
+@task(log_prints=True)
 def my_fastapi_task(name: str):
     print(f"Hello, {name}!")
 
@@ -346,7 +340,7 @@ Step 4: Start the Prefect Task server.
 In another terminal, run the following command to start the task server.
 
 ```bash
-python ff_prefect_task_server.py
+python prefect_tasks.py
 ```
 
 Step 5: Navigate to `http://127.0.0.1:8000/task` in the browser to submit a task!
@@ -369,13 +363,13 @@ Next, let's use Docker containers with more advanced workflows to move toward pr
 The following example will simulate a new user signup workflow with multiple services.
 We'll run a Prefect server instance, a Prefect task server, and a FastAPI server in separate Docker containers.
 
-All the code files for this example live in the [`fastapi-user-signups` directory](./tutorial/fastapi-user-signups).
+All the code files for this example live in the [`fastapi-user-signups` directory](./basic-examples/fastapi-user-signups).
 We've defined the FastAPI server, model, and tasks in Python files.
 The Makefile and docker-compose files are used to wire everything together.
 
 Step 1: Upgrade Docker to the latest version, if you aren't already using it.
 
-Step 2: Move into the [`fastapi-user-signups` directory](./tutorial/fastapi-user-signups/).
+Step 2: Move into the [`fastapi-user-signups` directory](./basic-examples/fastapi-user-signups/).
 
 Step 3: Run `make` to build the Docker images.
 

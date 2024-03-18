@@ -2,7 +2,7 @@ from prefect import task
 from prefect.task_server import serve
 
 
-@task
+@task(log_prints=True)
 def my_fastapi_task(name: str):
     print(f"Hello, {name}!")
 
