@@ -224,8 +224,8 @@ Step 3: Create a file named `task_submitter.py` and save the following code in i
 from tasks import my_background_task
 
 if __name__ == "__main__":
-     = my_background_task.submit("Agrajag")
-    print(val)
+    task_run = my_background_task.submit("Agrajag")
+    print(task_run)
 ```
 
 Step 4: Open another terminal and run the script.
