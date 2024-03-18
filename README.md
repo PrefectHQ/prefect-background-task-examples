@@ -69,6 +69,8 @@ After setting up your environment, feel free to skip ahead if you're already fam
 
 ### Setup
 
+<details> <summary>Expand</summary>
+
 Step 1: Activate a virtual environment
 
 The following example uses [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html), but any virtual environment manager will work.
@@ -129,9 +131,12 @@ Move into the directory.
 cd prefect-background-task-examples
 ```
 
-Alright, let's run some tasks!
+Let's run some tasks!
+</details>
 
 ### Example 1: Run a Prefect task outside of a flow
+
+<details> <summary>Expand</summary>
 
 Add the `@task` decorator to any Python function to define a Prefect task.
 
@@ -173,7 +178,11 @@ You can scroll down to see your most recent task runs or filter for them.
 
 Hit the refresh button for updates, if needed.
 
+</details>
+
 ### Example 2: Start a task server and run tasks in the background
+
+<details> <summary>Expand</summary>
 
 In this example, we'll start a task server and run tasks in the background.  
 
@@ -268,7 +277,11 @@ This is cool because we can observe these tasks executing in parallel and very q
 
 Next, let's wire up our task server to a FastAPI task server.
 
+</details>
+
 ### Example 3: Create a basic FastAPI server that submits tasks to a Prefect task server
+
+<details> <summary>Expand</summary>
 
 Step 1: Define API routes for the FastAPI server in a Python file.
 
@@ -347,7 +360,11 @@ Hit `control` + `c` in the respective terminals to stop the servers.
 You've seen how to use a FastAPI web server to offload work to a a Prefect task server - all while gaining observability into the task runs in the Prefect UI.
 Next, let's use Docker containers with more advanced workflows to move toward productionizing our code.
 
+</details>
+
 ### Example 4: Use Docker to run a FastAPI server and a Prefect task server
+
+<details> <summary>Expand</summary>
 
 The following example will simulate a new user signup workflow with multiple services.
 We'll run a Prefect server instance, a Prefect task server, and a FastAPI server in separate Docker containers.
@@ -388,7 +405,11 @@ Inspect the Docker containers and you should see that the Prefect server instanc
 There are multiple services that are engaged when the API URL is reached.
 Check out the Python files and the docker-compose.yml file to see how the services are set up.
 
+</details>
+
 ### Example 5: Use Docker to run a Flask server and a Prefect task server to ask an LLM questions with Marvin
+
+<details> <summary>Expand</summary>
 
 Step 1: Move into the *flask-task-monitoring* directory.
 
@@ -414,6 +435,8 @@ python ask.py "What is the meaning of life?"
 
 You should receive an text answer to your question.
 Have fun asking Marvin other deep questions.
+
+</details>
 
 ## Next steps
 
