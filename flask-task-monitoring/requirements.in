@@ -1,8 +1,7 @@
-prefect>=2.16.3
+prefect>=2.16.4
 flask[async]
-httpx
 marvin
-playsound
+
 
 # On Ubuntu, the pygobject package is a nice way
 # sudo apt install libcairo2-dev libgirepository1.0-dev

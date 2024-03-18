@@ -1,9 +1,5 @@
-#!/usr/bin/env python
 import asyncio
 import sys
-import tempfile
-
-import playsound
 from httpx import AsyncClient
 
 
@@ -29,12 +25,7 @@ async def ask(question: str):
                 break
 
         assert response.status_code == 200
-        assert response.headers["Content-Type"] == "audio/mp3"
-
-        with tempfile.NamedTemporaryFile() as f:
-            f.write(response.content)
-            f.flush()
-            playsound.playsound(f.name)
+        print(response.text)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+# just example, don't need redis for prefect tasks etc.
+
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field

@@ -1,4 +1,4 @@
-prefect>=2.16.3
+prefect>=2.16.4
 fastapi>=0.106,<=0.107
 httpx
 jinja2
