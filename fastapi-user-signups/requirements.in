@@ -1,8 +1,7 @@
 prefect>=2.16.4
 fastapi>=0.106,<=0.107
-httpx
-jinja2
 greenback
 pydantic>=2
 redis
 uvicorn
+pendulum==3.0.0
