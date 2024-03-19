@@ -109,7 +109,7 @@ If using Prefect Cloud, set the `PREFECT_API_URL` value to the Prefect Cloud API
 
 The examples that use docker (examples 4 and 5) use a local Prefect server instance by default.
 You can switch to Prefect Cloud by changing the `PREFECT_API_URL` and adding a variable for your API key in the `docker-compose.yaml`.
-Or use a local server instance backed by a PostgreSQL database by setting the `PREFECT__DATABASE__CONNECTION_URL`.
+Or use a local server instance backed by a PostgreSQL database by setting the `PREFECT_API_DATABASE_CONNECTION_URL`.
 
 If using a local Prefect server instance instead of Prefect Cloud, start your server by running the following command:
 
@@ -161,7 +161,7 @@ python greeter.py
 
 You should see the task run in the terminal.
 
-Optional:
+#### Optional
 
 You can see the task run in the UI (when the task run page is implemented - coming soon!).
 If you're using a self-hosted Prefect Server instance, you can also see the task runs in the database.
@@ -225,7 +225,7 @@ from tasks import my_background_task
 
 if __name__ == "__main__":
     task_run = my_background_task.submit("Agrajag")
-    print(val)
+    print(task_run)
 ```
 
 Step 4: Open another terminal and run the script.
