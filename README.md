@@ -224,7 +224,7 @@ Step 3: Create a file named `task_submitter.py` and save the following code in i
 from tasks import my_background_task
 
 if __name__ == "__main__":
-     = my_background_task.submit("Agrajag")
+    task_run = my_background_task.submit("Agrajag")
     print(val)
 ```
 
@@ -262,7 +262,7 @@ Step 7: Submit multiple tasks to the task server with `map`.
 Modify the `task_submitter.py` file to submit multiple tasks to the task server with different inputs by using the `map` method.
 
 ```python
-from task_server import my_background_task
+from tasks import my_background_task
 
 if __name__ == "__main__":
     my_background_task.map(["Ford", "Prefect", "Slartibartfast"])
@@ -326,6 +326,9 @@ def my_fastapi_task(name: str):
 
 
 if __name__ == "__main__":
+    # if on 2.16.4 or older add the following line
+    # from fastapi_tasks import my_fastapi_task
+    
     serve(my_fastapi_task)
 ```
 
