@@ -1,25 +1,13 @@
-# Prefect Background Tasks
+# Prefect Background Task Examples
 
 This repository contains example applications that demonstrate how to use [Prefect](https://prefect.io) to run background tasks.
 
-## Why use Prefect background tasks?
+## Why use background tasks?
 
 Prefect tasks are a great way to quickly execute discrete units of work in background processes.
 For example, if you have a web app, you can use tasks to offload processes such as sending emails, processing images, or inserting data into a database.
-With Prefect, you can run tasks in parallel, cache return values, configure automatic retries, and more, with a simple interface that scales up to complex workflows that need dynamic infrastructure.
 
-If you are familiar with tools like Celery and arq, Prefect offers a similar Pythonic interface for defining and running tasks, plus a host of other benefits including:
-
-- Support for asynchronous and synchronous Python
-- A rich UI and CLI for observing and managing task execution
-- Configurable retries, timeouts, error handling, caching, concurrency control, result
-  storage, and more
-- An interface that scales from background tasks to complex schedule- and event-driven
-  workflows
-- Metrics, events, incidents, automations, and other advanced features for monitoring and
-  managing tasks and workflows
-- A free and open-source version, an enterprise-grade Cloud for scheduling tasks
-  without managing infrastructure, and a self-hosted Cloud offering
+Prefect provides a Pythonic interface for defining and running tasks that supports advanced use cases, such as running tasks in parallel, caching return values, configuring automatic retries, and building complex workflows with task dependencies.
 
 ## Using tasks
 
@@ -32,8 +20,7 @@ This process is similar to how you would run a Celery worker or an arq worker to
 ### This feature is experimental
 
 Historically, tasks in Prefect could only be called within a [flow](https://docs.prefect.io/latest/concepts/flows/).
-Flows have a set of features similar to "Canvas" workflows in Celery or Directed Acyclic Graphs (DAGs) in batch
-processing systems such as Airflow.
+Flows have a set of features similar to "Canvas" workflows in Celery or Directed Acyclic Graphs (DAGs) in batch processing systems such as Airflow.
 
 Calling and submitting tasks outside of flows is currently **experimental**.
 To use this feature, set the `PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING` setting to `true`:
@@ -47,9 +34,81 @@ prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
 The Prefect team is actively working on this feature and would love to hear your feedback.
 Let us know what you think in the [Prefect Community Slack](https://communityinviter.com/apps/prefect-community/prefect-community).
 
-## Exploring Prefect tasks and task servers
+### Defining a task
 
-Let's explore increasingly realistic examples of using Prefect tasks and task servers.
+Add the `@task` decorator to a Python function to define a Prefect task.
+Here's an example:
+
+```python
+from prefect import task
+
+@task
+def my_background_task(name: str):
+    # Task logic here
+    print(f"Hello, {name}!")
+```
+
+### Calling tasks
+
+You can call a task to run it immediately, use `Task.map()` to run multiple invocations of the same task with different inputs, or submit the task for background execution with `Task.submit()`.
+
+**TIP:** For Celery users, `Task.submit()` is similar to `Task.delay()` or
+`Task.apply_async()`. For arq users, it's similar to `Task.enqueue()`.
+
+In all three cases, Prefect will use your task configuration to manage and control task execution.
+The following example shows all three methods:
+
+```python
+# Import the previously-defined task
+from my_tasks import my_background_task
+
+# Run the task immediately
+my_background_task("Joaquim")
+
+# Run the task multiple times with different inputs
+my_background_task.map(["Joaquim", "Marta", "Aiden"])
+
+# Submit the task for execution outside of this process
+my_background_task.submit()
+```
+
+For documentation on the features available for tasks, refer to the [Prefect
+Tasks documentation](https://docs.prefect.io/concepts/tasks/).
+
+### Executing background tasks with a task server
+
+To run tasks in a separate process or container, start a task server, similar to how you would run a Celery worker or an arq worker.
+
+The task server will continually receive submitted tasks to execute from Prefect's API, execute them, and report the results back to the API.
+You can run a task server by passing tasks into the `prefect.task_server.serve()` method, like in the following example *tasks.py* file:
+
+```python
+from prefect import task
+from prefect.task_server import serve
+
+
+@task
+def my_background_task(name: str):
+    # Task logic here
+    print(f"Hello, {name}!")
+
+
+if __name__ == "__main__":
+    # if using prefect 2.16.4 or older add the following line
+    # from tasks import my_background_task
+
+    # NOTE: The serve() function accepts multiple tasks. The Task Server 
+    # will listen for submitted task runs for all tasks passed in.
+    serve(my_background_task)
+```
+
+Run this script to start the task server.
+The task server should begin listening for submitted tasks.
+If tasks were submitted before the task server started, it will begin processing them.
+
+## Guided exploration of Prefect tasks and task servers
+
+Below we explore increasingly realistic examples of using Prefect tasks and task servers.
 
 We'll start by running a Prefect task outside of a flow.
 Previously, Prefect tasks could only be run inside a flow.
