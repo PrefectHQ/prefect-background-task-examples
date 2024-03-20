@@ -4,6 +4,7 @@ from flask import Flask, request
 from prefect.client.orchestration import get_client
 from prefect.client.schemas import TaskRun
 from prefect.client.schemas.objects import State, StateType
+
 from prefect.results import PersistedResult
 
 from .tasks import get_help
@@ -78,4 +79,4 @@ async def get_answer(task_run_id: str):
     # be stored or seen by the Prefect API.
     result: PersistedResult = state.result()
 
-    return await result.get(), 200, {"Content-Type": "audio/mp3"}
+    return await result.get(), 200, {"Content-Type": "application/text"}

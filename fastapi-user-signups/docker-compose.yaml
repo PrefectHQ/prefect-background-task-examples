@@ -26,7 +26,7 @@ services:
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: prefect server start --host 0.0.0.0
     ports:
-      - "14200:4200"
+      - "14200:4200" # host 14200 on my machine
     volumes:
       - prefect-data:/data
       - .:/app
@@ -41,9 +41,9 @@ services:
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: python -m fastapi_user_signups
     ports:
-      - 8000:8000
+      - 8000:8000 
     volumes:
-      - task-storage:/task-storage
+      - task-storage:/task-storage # shared by all containers - could be storage blocck
       - .:/app
     depends_on:
       - prefect
@@ -52,7 +52,7 @@ services:
       - marketito
   tasks:
     deploy:
-      replicas: 2
+      replicas: 2  # multiple task servers
     build:
       context: .
       dockerfile: Dockerfile

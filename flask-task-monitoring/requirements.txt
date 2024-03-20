@@ -101,7 +101,7 @@ httpcore==1.0.4
     #   prefect
 httpx[http2]==0.27.0
     # via
-    #   -r requirements.in
+    #   httpx
     #   marvin
     #   openai
     #   prefect
@@ -113,6 +113,8 @@ idna==3.6
     #   email-validator
     #   httpx
     #   requests
+importlib-resources==6.1.3
+    # via prefect
 itsdangerous==2.1.2
     # via
     #   flask
@@ -165,9 +167,7 @@ pathspec==0.12.1
     # via prefect
 pendulum==3.0.0
     # via prefect
-playsound==1.3.0
-    # via -r requirements.in
-prefect==2.16.3
+prefect==2.16.4
     # via -r requirements.in
 pyasn1==0.5.1
     # via
