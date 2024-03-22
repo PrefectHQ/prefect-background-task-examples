@@ -97,9 +97,7 @@ httpcore==1.0.4
     #   httpx
     #   prefect
 httpx[http2]==0.27.0
-    # via
-    #   httpx
-    #   prefect
+    # via prefect
 hyperframe==6.0.1
     # via h2
 idna==3.6
@@ -154,7 +152,7 @@ pendulum==3.0.0
     # via
     #   -r requirements.in
     #   prefect
-prefect==2.16.4
+prefect==2.16.5
     # via -r requirements.in
 pyasn1==0.5.1
     # via
@@ -245,7 +243,6 @@ sqlalchemy[asyncio]==2.0.27
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.28.0
     # via fastapi
 text-unidecode==1.3
