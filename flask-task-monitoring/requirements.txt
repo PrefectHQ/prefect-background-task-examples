@@ -101,7 +101,6 @@ httpcore==1.0.4
     #   prefect
 httpx[http2]==0.27.0
     # via
-    #   httpx
     #   marvin
     #   openai
     #   prefect
@@ -166,8 +165,10 @@ packaging==24.0
 pathspec==0.12.1
     # via prefect
 pendulum==3.0.0
-    # via prefect
-prefect==2.16.4
+    # via
+    #   -r requirements.in
+    #   prefect
+prefect==2.16.5
     # via -r requirements.in
 pyasn1==0.5.1
     # via
@@ -183,7 +184,6 @@ pydantic[email]==2.6.4
     #   marvin
     #   openai
     #   prefect
-    #   pydantic
     #   pydantic-settings
 pydantic-core==2.16.3
     # via pydantic
@@ -268,7 +268,6 @@ sqlalchemy[asyncio]==2.0.28
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.36.3
     # via fastapi
 text-unidecode==1.3
