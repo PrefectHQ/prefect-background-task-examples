@@ -8,7 +8,7 @@ This project enables processing and reacting to webhook events from GitHub repos
 
 1. Clone this repository:
    ```
-   gh repo clone https://github.com/prefecthq/marvin.git
+   gh repo clone prefecthq/marvin
    # or `git clone https://github.com/prefecthq/marvin.git` if you don't have `gh` installed
    ```
 
