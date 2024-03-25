@@ -44,9 +44,7 @@ services:
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
       PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     env_file:
-      # Should include an OPENAI_API_KEY
-      - path: ./.openai.env
-        required: true
+      - .openai.env
     command: python -m flask_task_monitoring.tasks
     volumes:
       - task-storage:/task-storage

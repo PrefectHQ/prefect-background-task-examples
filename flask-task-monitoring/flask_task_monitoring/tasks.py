@@ -51,11 +51,8 @@ async def get_help(question: str) -> bytes:
     if random.random() < 0.2:
         raise ValueError("Randomly failing, this should be retried")
 
-    audio = await marvin.speak_async(reply)
-
-    # The return value of this task are the bytes of the audio file, which will be
-    # encoded in MP3 format.
-    return audio.read()
+    # return text data response from Marvin
+    return reply
 
 
 if __name__ == "__main__":

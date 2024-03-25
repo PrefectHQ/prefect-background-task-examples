@@ -98,7 +98,7 @@ httpcore==1.0.4
     #   prefect
 httpx[http2]==0.27.0
     # via
-    #   -r requirements.in
+    #   httpx
     #   prefect
 hyperframe==6.0.1
     # via h2
@@ -108,12 +108,12 @@ idna==3.6
     #   email-validator
     #   httpx
     #   requests
+importlib-resources==6.1.3
+    # via prefect
 itsdangerous==2.1.2
     # via prefect
 jinja2==3.1.3
-    # via
-    #   -r requirements.in
-    #   prefect
+    # via prefect
 jsonpatch==1.33
     # via prefect
 jsonpointer==2.4
@@ -151,8 +151,10 @@ packaging==23.2
 pathspec==0.12.1
     # via prefect
 pendulum==3.0.0
-    # via prefect
-prefect==2.16.3
+    # via
+    #   -r requirements.in
+    #   prefect
+prefect==2.16.4
     # via -r requirements.in
 pyasn1==0.5.1
     # via

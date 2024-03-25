@@ -1,3 +1,9 @@
+# web api imports from tasks
+# can post to users endpoint with name and body and then fans out 3 bg tasks
+# fire and forget, no dependency on each other
+# not prefect not imported
+# but needs to be in the env b/c tasks are imported
+
 import fastapi
 
 from . import models, tasks

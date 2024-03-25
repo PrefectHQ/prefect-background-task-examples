@@ -4,7 +4,7 @@
 requirements_in = $(filter-out MANIFEST.in, $(wildcard *.in))
 requirements_out := $(requirements_in:.in=.txt)
 
-PIP_VERSION=23.3.2
+PIP_VERSION=24.0
 PIP_TOOLS_VERSION=7.3.0
 
 all: $(requirements_out) install
