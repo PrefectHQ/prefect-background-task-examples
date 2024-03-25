@@ -14,7 +14,7 @@ This project enables processing and reacting to webhook events from GitHub repos
 
 2. Navigate to the app directory:
    ```
-   cd cookbook/apps/repo_activities
+   cd repo_activities
    ```
 
 3. Create a `.env` file in the project root and set the required environment variables:
