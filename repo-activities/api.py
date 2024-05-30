@@ -54,7 +54,7 @@ async def repo_event(request: FasterRequest):
     if settings.test_mode:
         save_request(req)
 
-    await handle_repo_request.apply_async(args=[req])
+    await handle_repo_request.apply_async(args=(req,))
 
     return {"message": "repo event received"}
 

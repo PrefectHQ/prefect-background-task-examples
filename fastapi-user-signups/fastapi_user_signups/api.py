@@ -24,8 +24,8 @@ async def create_user(new_user: NewUser) -> User:
     #     tasks.populate_workspace.submit(user),
     # )
 
-    tasks.send_confirmation_email.apply_async(args=[user])
-    tasks.enroll_in_onboarding_flow.apply_async(args=[user])
-    tasks.populate_workspace.apply_async(args=[user])
+    tasks.send_confirmation_email.apply_async(args=(user,))
+    tasks.enroll_in_onboarding_flow.apply_async(args=(user,))
+    tasks.populate_workspace.apply_async(args=(user,))
 
     return user
