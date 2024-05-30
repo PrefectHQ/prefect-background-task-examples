@@ -4,18 +4,19 @@ This repository contains example applications that demonstrate how to use [Prefe
 
 ## Why use deferred tasks?
 
-Prefect tasks are a great way to quickly execute discrete units of work in background processes.
+Prefect tasks are a great way to quickly execute discrete units of work. _Deferred_ Prefect tasks run in a background process using a Prefect task server. This lets you use deferred tasks to move work out of the foreground of your application and distribute concurrent execution across across multiple processes or machines.
+
 For example, if you have a web app, you can use tasks to offload processes such as sending emails, processing images, or inserting data into a database.
 
-Prefect provides a Pythonic interface for defining and running tasks that supports advanced use cases, such as running tasks in parallel, caching return values, configuring automatic retries, and building complex workflows with task dependencies.
+Prefect provides a Pythonic interface for defining and running tasks, and this document will focus on how to use defer task execution. However, Prefect tasks support other advanced use cases, such as running tasks in parallel on Ray or Dask clusters, caching return values, configuring automatic retries, and building complex workflows with task dependencies.
 
 ## Using deferred tasks
 
-Prefect tasks are Python functions that can be run immediately or submitted for background execution, similar to arq tasks.
+Prefect tasks are Python functions that can be run immediately or submitted for background execution, similar to arq tasks. 
+
 You define a task by adding the `@task` decorator to a Python function, after which you can use the `apply_async` method to run the task in the background.
 
-If you submit the task for background execution, you'll run a task server in a separate process or container to execute the task.
-This process is similar to how you would run a Celery worker or an arq worker to execute background tasks.
+If you submit the task for background execution, you'll run a task server in a separate process or container to execute the task. This process is similar to how you would run a Celery worker or an arq worker to execute background tasks.
 
 ### Defining a task
 
@@ -33,10 +34,12 @@ def my_background_task(name: str):
 
 ### Calling tasks
 
-You can call a task to run it immediately or submit the task for background execution with `Task.apply_async`.
+You can call a task to run it immediately or defer the task by scheduling it for background execution with `Task.apply_async`.
 
-In both cases, Prefect will use your task configuration to manage and control task execution.
-The following example shows both methods:
+**NOTE**: It is also possible to submit tasks to a _task runner_ such as Ray or Dask -- and to defer task execution -- within a workflow, which in Prefect is called a _flow_. However, this document will focus on deferring task execution outside of workflows. For example, by calling `my_task.apply_async()` within a web application.
+
+However you run a task, Prefect will use your task configuration to manage and control task execution.
+The following example shows both methods mentioned earlier, calling a task and using `apply_async`:
 
 ```python
 # Import the previously-defined task
@@ -45,7 +48,7 @@ from my_tasks import my_background_task
 # Run the task immediately
 my_background_task("Joaquim")
 
-# Submit the task for execution outside of this process
+# Schedule the task for execution outside of this process
 my_background_task.apply_async(args=("Agrajag",))
 ```
 
@@ -53,9 +56,12 @@ For documentation on the features available for tasks, refer to the [Prefect Tas
 
 ### Executing deferred tasks with a task server
 
-To run tasks in a separate process or container, start a task server, similar to how you would run a Celery worker or an arq worker.
+To run tasks in a separate process or container from where you schedule them with `apply_async`, start a task server, similar to how you would run a Celery worker or an arq worker.
 
-The task server will continually receive submitted tasks to execute from Prefect's API, execute them, and report the results back to the API.
+The task server will continually receive deferred tasks to execute from Prefect's API, execute them, and report the results back to the API.
+
+**NOTE:** Task servers only run deferred tasks, not tasks you call directly.
+
 You can run a task server by passing tasks into the `prefect.task_server.serve()` method, like in the following example *tasks.py* file:
 
 ```python
@@ -76,25 +82,24 @@ if __name__ == "__main__":
 ```
 
 Run this script to start the task server.
-The task server should begin listening for submitted tasks.
-If tasks were submitted before the task server started, it will begin processing them.
 
-## Guided exploration of Prefect deferred tasks and task servers
+The task server should begin listening for submitted tasks. If tasks were submitted before the task server started, it will begin processing them.
 
-Below we explore increasingly realistic examples of using Prefect deferred tasks and task servers.
+**NOTE**: You can also use the helper CLI command `prefect task serve` to start a task server.
 
-We'll start by running a Prefect task outside of a flow.
-Previously, Prefect tasks could only be run inside a flow.
-Now, you can run tasks anywhere you like. The only restriction on tasks is that a task cannot call another task.
+## Guided exploration of deferred tasks and task servers in Prefect
 
-Next we'll start a task server and run tasks in the background.
-We'll see how we can use multiple task servers to run tasks in parallel.
+Below we explore increasingly realistic examples of using deferred tasks and task servers in Prefect.
 
-Then we create a basic FastAPI application that submits tasks to a Prefect task server when you hit an endpoint.
+We'll start by running a Prefect task in the foreground by calling it.
+
+Next we'll start a task server and defer tasks so that they run in the background. We'll see how we can use multiple task servers to run tasks in parallel.
+
+Then we'll create a basic FastAPI application that defers tasks when you hit an endpoint.
 
 Next we'll use Docker in two examples that mimic real use cases.
 One example uses a FastAPI server with multiple microservices and simulates a new user signup workflow.
-The other example uses a Flask server with Marvin to ask an LLM questions from the CLI and get back answers.
+The other example uses a Flask server with [Marvin](https://www.askmarvin.ai/) to ask questions of an LLM from the CLI and get back answers.
 
 The examples build on the ones that come before.
 After setting up your environment, feel free to skip ahead if you're already familiar with the basics.
@@ -160,7 +165,7 @@ cd prefect-background-task-examples
 Let's run some tasks!
 </details>
 
-### Example 1: Run a Prefect task outside of a flow
+### Example 1: Run a Prefect task in the foreground by calling it
 
 <details> <summary>Expand</summary>
 
@@ -185,11 +190,11 @@ Step 2: Run the script in the terminal.
 python greeter.py
 ```
 
-You should see the task run in the terminal.
+You should see the task run in the terminal. This task runs in the foreground. In other words, it is not deferred.
 
 #### Optional
 
-You can see the task run in the UI (when the task run page is implemented - coming soon!).
+You can see the task run in the UI.
 If you're using a self-hosted Prefect Server instance, you can also see the task runs in the database.
 
 If you want to inspect the SQLite database, use your favorite interface.
@@ -206,11 +211,11 @@ Hit the refresh button for updates, if needed.
 
 </details>
 
-### Example 2: Start a task server and run tasks in the background
+### Example 2: Start a task server and run deferred tasks in the background
 
 <details> <summary>Expand</summary>
 
-In this example, we'll start a task server and run tasks in the background.  
+In this example, we'll start a task server and run deferred tasks in the background.  
 
 To run tasks in a separate process or container, you'll need to start a task server, similar to how you would run a Celery worker or an arq worker.
 The task server will continually receive submitted tasks to execute from Prefect's API, execute them, and report the results back to the API.
@@ -229,9 +234,6 @@ def my_background_task(name: str):
 
 
 if __name__ == "__main__":
-    # if using prefect 2.16.4 or older add the following line
-    # from task_server import my_background_task
-
     serve(my_background_task)
 ```
 
@@ -259,8 +261,8 @@ Step 4: Open another terminal and run the script.
 python task_submitter.py
 ```
 
-Note that we return the task run object from the `apply_async` method.
-This way we can see the task run UUID and other information about the task run.
+Note that we return the a "future" from the `apply_async` method. You can use this object to wait for the task to complete with `wait()` and to retrieve its result with `result()`.
+We can also see the task run's UUID and other information about the task run.
 
 Step 5: See the task run in the UI.
 
@@ -330,8 +332,8 @@ def greet():
 
 @app.get("/task")
 async def prefect_task():
-    data = my_fastapi_task.apply_async(args=("Trillian",))
-    return {"message": f"Prefect Task submitted: {data}"}
+    future = my_fastapi_task.apply_async(args=("Trillian",))
+    return {"message": f"Prefect Task submitted: {future.task_run_id}"}
 ```
 
 Step 2: Define a Prefect task server in a Python file.
@@ -349,9 +351,6 @@ def my_fastapi_task(name: str):
 
 
 if __name__ == "__main__":
-    # if on 2.16.4 or older add the following line
-    # from fastapi_tasks import my_fastapi_task
-    
     serve(my_fastapi_task)
 ```
 
