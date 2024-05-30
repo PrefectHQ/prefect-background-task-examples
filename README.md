@@ -34,7 +34,7 @@ def my_background_task(name: str):
 
 ### Calling tasks
 
-You can call a task to run it immediately or defer the task by scheduling it for background execution with `Task.apply_async`.
+You can call a task to run it immediately, or you can defer the task by scheduling it for background execution with `Task.apply_async`.
 
 **NOTE**: It is also possible to submit tasks to a _task runner_ such as Ray or Dask -- and to defer task execution -- within a workflow, which in Prefect is called a _flow_. However, this document will focus on deferring task execution outside of workflows. For example, by calling `my_task.apply_async()` within a web application.
 
