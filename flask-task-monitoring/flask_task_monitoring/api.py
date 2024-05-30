@@ -26,7 +26,7 @@ async def ask_question():
     # the Prefect API.  Instead, they are stored in the common result storage area that
     # the application and task servers share (in this example application, that is a
     # filesystem path).
-    answer: TaskRun = await get_help.submit(question)
+    answer: TaskRun = get_help.apply_async(args=[question])
 
     # The ID of the task run is what we'll need to check the status of the task later,
     # so return it to the caller.  In other applications, you may store this ID in your

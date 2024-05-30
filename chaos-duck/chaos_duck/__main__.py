@@ -24,7 +24,7 @@ async def main(iterations: int):
     task_runs: dict[UUID, int] = {}
     for i in range(iterations):
         try:
-            run: TaskRun = await tasks.ping.submit(i)
+            run: TaskRun = await tasks.ping.apply_async(args=[i])
         except Exception as exc:
             print(f"Failed to submit task run {i}: {exc}")
             submission_failures += 1
