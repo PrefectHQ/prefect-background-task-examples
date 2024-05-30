@@ -26,7 +26,7 @@ async def wreak_havoc():
             # Agent of chaos #2: send a task to crash the task server
             #
             print("🦆 Sending a crash_me task")
-            await crash_me.submit(42)
+            await crash_me.apply_async(args=(42,))
 
 
 async def kill_a_task_server():

@@ -13,5 +13,5 @@ def greet():
 
 @app.get("/task")
 async def prefect_task():
-    data = my_fastapi_task.submit(name="Trillian")
+    data = my_fastapi_task.apply_async(kwargs={"name": "Trillian"})
     return {"message": f"Prefect Task submitted: {data}"}
