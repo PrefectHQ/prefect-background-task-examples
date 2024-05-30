@@ -1,38 +1,21 @@
-# Prefect Background Task Examples
+# Prefect Deferred Task Examples
 
-This repository contains example applications that demonstrate how to use [Prefect](https://prefect.io) to run background tasks.
+This repository contains example applications that demonstrate how to use [Prefect](https://prefect.io) to run deferred tasks.
 
-## Why use background tasks?
+## Why use deferred tasks?
 
 Prefect tasks are a great way to quickly execute discrete units of work in background processes.
 For example, if you have a web app, you can use tasks to offload processes such as sending emails, processing images, or inserting data into a database.
 
 Prefect provides a Pythonic interface for defining and running tasks that supports advanced use cases, such as running tasks in parallel, caching return values, configuring automatic retries, and building complex workflows with task dependencies.
 
-## Using tasks
+## Using deferred tasks
 
-Prefect tasks are Python functions that can be run immediately or submitted for background execution, similar to arq or Celery tasks.
-You define a task by adding the `@task` decorator to a Python function, after which you can use one of several methods to run the task.
+Prefect tasks are Python functions that can be run immediately or submitted for background execution, similar to arq tasks.
+You define a task by adding the `@task` decorator to a Python function, after which you can use the `apply_async` method to run the task in the background.
 
 If you submit the task for background execution, you'll run a task server in a separate process or container to execute the task.
 This process is similar to how you would run a Celery worker or an arq worker to execute background tasks.
-
-### This feature is experimental
-
-Historically, tasks in Prefect could only be called within a [flow](https://docs.prefect.io/latest/concepts/flows/).
-Flows have a set of features similar to "Canvas" workflows in Celery or Directed Acyclic Graphs (DAGs) in batch processing systems such as Airflow.
-
-Calling and submitting tasks outside of flows is currently **experimental**.
-To use this feature, set the `PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING` setting to `true`:
-
-```bash
-prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
-```
-
-**NOTE**: With this setting turned on, you can use tasks without flows both when using an open-source Prefect API server or with Prefect Cloud.
-
-The Prefect team is actively working on this feature and would love to hear your feedback.
-Let us know what you think in the [Prefect Community Slack](https://communityinviter.com/apps/prefect-community/prefect-community).
 
 ### Defining a task
 
@@ -50,13 +33,10 @@ def my_background_task(name: str):
 
 ### Calling tasks
 
-You can call a task to run it immediately, use `Task.map()` to run multiple invocations of the same task with different inputs, or submit the task for background execution with `Task.submit()`.
+You can call a task to run it immediately or submit the task for background execution with `Task.apply_async`.
 
-**TIP:** For Celery users, `Task.submit()` is similar to `Task.delay()` or
-`Task.apply_async()`. For arq users, it's similar to `Task.enqueue()`.
-
-In all three cases, Prefect will use your task configuration to manage and control task execution.
-The following example shows all three methods:
+In both cases, Prefect will use your task configuration to manage and control task execution.
+The following example shows both methods:
 
 ```python
 # Import the previously-defined task
@@ -65,17 +45,13 @@ from my_tasks import my_background_task
 # Run the task immediately
 my_background_task("Joaquim")
 
-# Run the task multiple times with different inputs
-my_background_task.map(["Joaquim", "Marta", "Aiden"])
-
 # Submit the task for execution outside of this process
-my_background_task.submit()
+my_background_task.apply_async(args=("Agrajag",))
 ```
 
-For documentation on the features available for tasks, refer to the [Prefect
-Tasks documentation](https://docs.prefect.io/concepts/tasks/).
+For documentation on the features available for tasks, refer to the [Prefect Tasks documentation](https://docs.prefect.io/concepts/tasks/).
 
-### Executing background tasks with a task server
+### Executing deferred tasks with a task server
 
 To run tasks in a separate process or container, start a task server, similar to how you would run a Celery worker or an arq worker.
 
@@ -94,9 +70,6 @@ def my_background_task(name: str):
 
 
 if __name__ == "__main__":
-    # if using prefect 2.16.4 or older add the following line
-    # from tasks import my_background_task
-
     # NOTE: The serve() function accepts multiple tasks. The Task Server 
     # will listen for submitted task runs for all tasks passed in.
     serve(my_background_task)
@@ -106,9 +79,9 @@ Run this script to start the task server.
 The task server should begin listening for submitted tasks.
 If tasks were submitted before the task server started, it will begin processing them.
 
-## Guided exploration of Prefect tasks and task servers
+## Guided exploration of Prefect deferred tasks and task servers
 
-Below we explore increasingly realistic examples of using Prefect tasks and task servers.
+Below we explore increasingly realistic examples of using Prefect deferred tasks and task servers.
 
 We'll start by running a Prefect task outside of a flow.
 Previously, Prefect tasks could only be run inside a flow.
@@ -146,17 +119,11 @@ Step 2: Install Python dependencies
 pip install -U prefect marvin fastapi==0.107
 ```
 
-Step 3: Set your Prefect profile to use experimental task scheduling
-
-```bash
-prefect config set PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING=true
-```
-
-Step 4: Connect to Prefect Cloud or a local Prefect server instance (if not set already)
+Step 3: Connect to Prefect Cloud or a local Prefect server instance (if not set already)
 
 You can use either Prefect Cloud or a local Prefect server instance for these examples.
 
-You need to have `PREFECT_API_URL`set to submit tasks to task servers.
+You need to have `PREFECT_API_URL` set to submit tasks to task servers.
 
 If you're using a local Prefect server instance with a SQLite backing database (the default database), you can save this value to your active Prefect Profile by running the following command in your terminal.
 
@@ -176,7 +143,7 @@ If using a local Prefect server instance instead of Prefect Cloud, start your se
 prefect server start 
 ```
 
-Step 5: Clone the repository (optional)
+Step 4: Clone the repository (optional)
 
 You can code from scratch or clone the repository to get the code files for the examples.
 
@@ -271,7 +238,7 @@ if __name__ == "__main__":
 Step 2: Start the task server by running the script in the terminal.
 
 ```bash
-python tasks.py
+python task_server.py
 ```
 
 The task server is now waiting for runs of the `my_background_task` task.
@@ -283,8 +250,7 @@ Step 3: Create a file named `task_submitter.py` and save the following code in i
 from tasks import my_background_task
 
 if __name__ == "__main__":
-    task_run = my_background_task.submit("Agrajag")
-    print(task_run)
+    my_background_task.apply_async(args=("Agrajag",))
 ```
 
 Step 4: Open another terminal and run the script.
@@ -293,9 +259,7 @@ Step 4: Open another terminal and run the script.
 python task_submitter.py
 ```
 
-**TIP:** For Celery users, `Task.submit()` is similar to `Task.delay()` or `Task.apply_async()`. For arq users, it's similar to `Task.enqueue()`.
-
-Note that we return the task run object from the `submit` method.
+Note that we return the task run object from the `apply_async` method.
 This way we can see the task run UUID and other information about the task run.
 
 Step 5: See the task run in the UI.
@@ -313,28 +277,28 @@ Step 6: You can use multiple task servers to run tasks in parallel.
 Start another instance of the task server. In another terminal run:
 
 ```bash
-python tasks.py
+python task_server.py
 ```
 
-Step 7: Submit multiple tasks to the task server with `map`.
+Step 7: Submit multiple tasks to the task server.
 
-Modify the `task_submitter.py` file to submit multiple tasks to the task server with different inputs by using the `map` method.
+Modify the `task_submitter.py` file to submit multiple tasks to the task server with different inputs:
 
 ```python
 from tasks import my_background_task
 
 if __name__ == "__main__":
-    my_background_task.map(["Ford", "Prefect", "Slartibartfast"])
+    my_background_task.apply_async(args=("Ford",))
+    my_background_task.apply_async(args=("Prefect",))
+    my_background_task.apply_async(args=("Slartibartfast",))
 ```
 
 Run the file and watch the work get distributed across both task servers!
 
-Step 8: Shut down the task servers with *control* + *c*
+Step 8: Shut down the task servers with *control* + *c*.
 
 Alright, you're able to submit tasks to multiple Prefect task servers running in the background!
 This is cool because we can observe these tasks executing in parallel and very quickly with web sockets - no polling required.
-
-Next, let's wire up our task server to a FastAPI task server.
 
 </details>
 
@@ -348,7 +312,7 @@ Let's define two routes for our FastAPI server.
 The first is a basic hello world route at the root URL to confirm that the FastAPI server is working.
 The second route, `/task`, will submit a task to the Prefect task server when the `http://127.0.0.1:8000/task` URL is hit and return information about the submitted task.
 
-Here are the contents of [first_fastapi.py](./basic-examples/first_fastapi.py)
+Here are the contents of `first_fastapi.py`:
 
 ```python
 from fastapi import FastAPI
@@ -366,13 +330,13 @@ def greet():
 
 @app.get("/task")
 async def prefect_task():
-    data = my_fastapi_task.submit(name="Trillian")
+    data = my_fastapi_task.apply_async(args=("Trillian",))
     return {"message": f"Prefect Task submitted: {data}"}
 ```
 
 Step 2: Define a Prefect task server in a Python file.
 
-Here are the contents of [fastapi_tasks.py](./basic-examples/fastapi_tasks_server.py)
+Here are the contents of `fastapi_tasks.py`:
 
 ```python
 from prefect import task
@@ -402,7 +366,7 @@ Step 4: Start the Prefect Task server.
 In another terminal, run the following command to start the task server.
 
 ```bash
-python prefect_tasks.py
+python fastapi_tasks.py
 ```
 
 Step 5: Navigate to `http://127.0.0.1:8000/task` in the browser to submit a task!
@@ -413,7 +377,7 @@ Step 6: Stop the servers.
 
 Hit `control` + `c` in the respective terminals to stop the servers.
 
-You've seen how to use a FastAPI web server to offload work to a a Prefect task server - all while gaining observability into the task runs in the Prefect UI.
+You've seen how to use a FastAPI web server to offload work to a Prefect task server - all while gaining observability into the task runs in the Prefect UI.
 Next, let's use Docker containers with more advanced workflows to move toward productionizing our code.
 
 </details>
@@ -425,13 +389,13 @@ Next, let's use Docker containers with more advanced workflows to move toward pr
 The following example will simulate a new user signup workflow with multiple services.
 We'll run a Prefect server instance, a Prefect task server, and a FastAPI server in separate Docker containers.
 
-All the code files for this example live in the [`fastapi-user-signups` directory](./basic-examples/fastapi-user-signups).
+All the code files for this example live in the `fastapi-user-signups` directory.
 We've defined the FastAPI server, model, and tasks in Python files.
 The Makefile and docker-compose files are used to wire everything together.
 
 Step 1: Upgrade Docker to the latest version, if you aren't already using it.
 
-Step 2: Move into the [`fastapi-user-signups` directory](./basic-examples/fastapi-user-signups/).
+Step 2: Move into the `fastapi-user-signups` directory.
 
 Step 3: Run `make` to build the Docker images.
 
@@ -448,7 +412,7 @@ docker compose up
 
 Step 5: Send a new user signup to the FastAPI server.
 
-From you terminal, run the following command to send a new user signup to the FastAPI server.
+From your terminal, run the following command to send a new user signup to the FastAPI server.
 
 ```bash
 curl -X POST http://localhost:8000/users --header "Content-Type: application/json" --data '{"email": "chris.g@prefect.io", "name": "Guidry"}'
@@ -467,9 +431,9 @@ Check out the Python files and the docker-compose.yml file to see how the servic
 
 <details> <summary>Expand</summary>
 
-Step 1: Move into the *flask-task-monitoring* directory.
+Step 1: Move into the `flask-task-monitoring` directory.
 
-Step 2: Grab an API key from OpenAI and create an *.openai.env* file in the *flask-task-monitoring* top directory with the following contents:
+Step 2: Grab an API key from OpenAI and create an `.openai.env` file in the `flask-task-monitoring` top directory with the following contents:
 
 ```
 OPENAI_API_KEY=my_api_key_goes_here
@@ -477,27 +441,27 @@ OPENAI_API_KEY=my_api_key_goes_here
 
 Step 3: Run `make` to pull the Docker images and build the containers.
 
+```bash
+make
+```
+
 Step 4: Run `docker compose up` to start the servers in the containers.
+
+```bash
+docker compose up
+```
 
 Troubleshoot as needed following the process in Example 4.
 
 Step 5: Submit questions to Marvin via Flask.
 
-Use the following command to run the script at in the `ask.py` file and ask Marvin a question.
+Use the following command to run the script in the `ask.py` file and ask Marvin a question.
 
 ```bash
 python ask.py "What is the meaning of life?"
 ```
 
-You should receive an text answer to your question.
+You should receive a text answer to your question.
 Have fun asking Marvin other deep questions.
 
 </details>
-
-## Next steps
-
-Way to go!
-You've seen how to use Prefect to run tasks in the background with a Prefect task server and several web servers.
-
-There's lots more you can do with Prefect tasks.
-We can't wait to see what you build!
