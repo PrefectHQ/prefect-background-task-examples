@@ -14,7 +14,7 @@ Prefect provides a Pythonic interface for defining and running tasks, and this d
 
 Prefect tasks are Python functions that can be run immediately or submitted for background execution, similar to arq tasks. 
 
-You define a task by adding the `@task` decorator to a Python function, after which you can use the `apply_async` method to run the task in the background.
+You define a task by adding the `@task` decorator to a Python function, after which you can use the `delay` method to run the task in the background.
 
 If you submit the task for background execution, you'll run a task server in a separate process or container to execute the task. This process is similar to how you would run a Celery worker or an arq worker to execute background tasks.
 
@@ -34,12 +34,12 @@ def my_background_task(name: str):
 
 ### Calling tasks
 
-You can call a task to run it immediately, or you can defer the task by scheduling it for background execution with `Task.apply_async`.
+You can call a task to run it immediately, or you can defer the task by scheduling it for background execution with `Task.delay`.
 
-**NOTE**: It is also possible to submit tasks to a _task runner_ such as Ray or Dask -- and to defer task execution -- within a workflow, which in Prefect is called a _flow_. However, this document will focus on deferring task execution outside of workflows. For example, by calling `my_task.apply_async()` within a web application.
+**NOTE**: It is also possible to submit tasks to a _task runner_ such as Ray or Dask -- and to defer task execution -- within a workflow, which in Prefect is called a _flow_. However, this document will focus on deferring task execution outside of workflows. For example, by calling `my_task.delay()` within a web application.
 
 However you run a task, Prefect will use your task configuration to manage and control task execution.
-The following example shows both methods mentioned earlier, calling a task and using `apply_async`:
+The following example shows both methods mentioned earlier, calling a task and using `delay`:
 
 ```python
 # Import the previously-defined task
@@ -49,14 +49,14 @@ from my_tasks import my_background_task
 my_background_task("Joaquim")
 
 # Schedule the task for execution outside of this process
-my_background_task.apply_async(args=("Agrajag",))
+my_background_task.delay("Agrajag")
 ```
 
 For documentation on the features available for tasks, refer to the [Prefect Tasks documentation](https://docs.prefect.io/concepts/tasks/).
 
 ### Executing deferred tasks with a task server
 
-To run tasks in a separate process or container from where you schedule them with `apply_async`, start a task server, similar to how you would run a Celery worker or an arq worker.
+To run tasks in a separate process or container from where you schedule them with `delay`, start a task server, similar to how you would run a Celery worker or an arq worker.
 
 The task server will continually receive deferred tasks to execute from Prefect's API, execute them, and report the results back to the API.
 
@@ -252,7 +252,7 @@ Step 3: Create a file named `task_submitter.py` and save the following code in i
 from tasks import my_background_task
 
 if __name__ == "__main__":
-    my_background_task.apply_async(args=("Agrajag",))
+    my_background_task.delay("Agrajag")
 ```
 
 Step 4: Open another terminal and run the script.
@@ -261,7 +261,7 @@ Step 4: Open another terminal and run the script.
 python task_submitter.py
 ```
 
-Note that we return the a "future" from the `apply_async` method. You can use this object to wait for the task to complete with `wait()` and to retrieve its result with `result()`.
+Note that we return the a "future" from the `delay` method. You can use this object to wait for the task to complete with `wait()` and to retrieve its result with `result()`.
 We can also see the task run's UUID and other information about the task run.
 
 Step 5: See the task run in the UI.
@@ -290,9 +290,9 @@ Modify the `task_submitter.py` file to submit multiple tasks to the task server 
 from tasks import my_background_task
 
 if __name__ == "__main__":
-    my_background_task.apply_async(args=("Ford",))
-    my_background_task.apply_async(args=("Prefect",))
-    my_background_task.apply_async(args=("Slartibartfast",))
+    my_background_task.delay("Ford")
+    my_background_task.delay("Prefect")
+    my_background_task.delay("Slartibartfast")
 ```
 
 Run the file and watch the work get distributed across both task servers!
@@ -332,7 +332,7 @@ def greet():
 
 @app.get("/task")
 async def prefect_task():
-    future = my_fastapi_task.apply_async(args=("Trillian",))
+    future = my_fastapi_task.delay("Trillian")
     return {"message": f"Prefect Task submitted: {future.task_run_id}"}
 ```
 
