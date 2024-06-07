@@ -58,7 +58,7 @@ async def get_answer(task_run_id: str):
 
     # A task run may be in one of several states.  When it is first submitted, it will
     # be in a `SCHEDULED` state.  It will then transition to a `PENDING` state when a
-    # `TaskServer` has received it (or `CRASHED` if something went wrong at this point)
+    # `TaskWorker` has received it (or `CRASHED` if something went wrong at this point)
     # The run will then move on to `RUNNING` while it is executing, arriving in the
     # final state of `COMPLETED` or `FAILED`.  If you are using
     # task retries (https://docs.prefect.io/latest/concepts/tasks/#retries), you may

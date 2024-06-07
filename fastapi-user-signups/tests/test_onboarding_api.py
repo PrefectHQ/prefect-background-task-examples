@@ -13,7 +13,7 @@ from prefect.client.schemas.filters import (
     TaskRunFilterState,
     TaskRunFilterStateType,
 )
-from prefect.task_worker import TaskServer
+from prefect.task_worker import TaskWorker
 from prefect.testing.utilities import prefect_test_harness
 from pytest_httpx import HTTPXMock
 from starlette.types import ASGIApp
@@ -77,8 +77,8 @@ async def test_creating_user_schedules_onboarding_tasks(
 @pytest.fixture
 async def onboarding_task_worker(
     prefect: PrefectClient,
-) -> Generator[TaskServer, None, None]:
-    return TaskServer(
+) -> Generator[TaskWorker, None, None]:
+    return TaskWorker(
         tasks.enroll_in_onboarding_flow,
         tasks.populate_workspace,
         tasks.send_confirmation_email,
@@ -97,7 +97,7 @@ async def new_user(client: TestClient, prefect: PrefectClient) -> User:
 
 
 async def test_user_signup_populates_workspace(
-    new_user: User, onboarding_task_worker: TaskServer
+    new_user: User, onboarding_task_worker: TaskWorker
 ):
     workspace_things = await models.get_things_in_user_workspace(new_user)
     assert len(workspace_things) == 0
@@ -109,7 +109,7 @@ async def test_user_signup_populates_workspace(
 
 
 async def test_user_signup_sends_confirmation_email(
-    new_user: User, onboarding_task_worker: TaskServer, httpx_mock: HTTPXMock
+    new_user: User, onboarding_task_worker: TaskWorker, httpx_mock: HTTPXMock
 ):
     httpx_mock.add_response(url="http://mailboi/send-mail", status_code=666)
 
@@ -126,7 +126,7 @@ async def test_user_signup_sends_confirmation_email(
 
 
 async def test_user_signup_enrolls_user_in_onboarding_flow(
-    new_user: User, onboarding_task_worker: TaskServer, httpx_mock: HTTPXMock
+    new_user: User, onboarding_task_worker: TaskWorker, httpx_mock: HTTPXMock
 ):
     httpx_mock.add_response(url="http://marketito/enroll-user", status_code=666)
 
