@@ -18,18 +18,18 @@ async def wreak_havoc():
             await hard_restart_the_prefect_server()
         elif random.random() < 0.1:
             #
-            # Agent of chaos #3: randomly kill a task server
+            # Agent of chaos #3: randomly kill a task worker
             #
-            await kill_a_task_server()
+            await kill_a_task_worker()
         elif random.random() < 0.2:
             #
-            # Agent of chaos #2: send a task to crash the task server
+            # Agent of chaos #2: send a task to crash the task worker
             #
             print("🦆 Sending a crash_me task")
             await crash_me.delay(42)
 
 
-async def kill_a_task_server():
+async def kill_a_task_worker():
     client = docker.DockerClient()
 
     containers: list[Container] = client.containers.list()

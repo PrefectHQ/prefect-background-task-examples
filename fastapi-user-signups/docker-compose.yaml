@@ -52,7 +52,7 @@ services:
       - marketito
   tasks:
     deploy:
-      replicas: 2  # multiple task servers
+      replicas: 2  # multiple task workers
     build:
       context: .
       dockerfile: Dockerfile
