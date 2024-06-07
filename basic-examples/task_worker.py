@@ -1,5 +1,11 @@
+from prefect import task
 from prefect.task_worker import serve
-from tasks import my_background_task
+
+
+@task
+def my_background_task(name: str):
+    print(f"Hello, {name}!")
+    return f"Hello, {name}!"
 
 
 if __name__ == "__main__":

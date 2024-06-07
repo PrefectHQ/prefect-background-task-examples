@@ -1,4 +1,4 @@
-from tasks import my_background_task
+from task_worker import my_background_task
 
 if __name__ == "__main__":
     task_run = my_background_task.delay("Agrajag")

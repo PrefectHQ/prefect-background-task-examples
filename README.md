@@ -249,7 +249,7 @@ Let's give it some task runs.
 Step 3: Create a file named `task_submitter.py` and save the following code in it.
 
 ```python
-from tasks import my_background_task
+from task_worker import my_background_task
 
 if __name__ == "__main__":
     my_background_task.delay("Agrajag")
