@@ -3,7 +3,7 @@ from datetime import timedelta
 
 import marvin
 from prefect import task
-from prefect.task_server import serve
+from prefect.task_worker import serve
 from prefect.tasks import task_input_hash
 
 

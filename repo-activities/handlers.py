@@ -4,7 +4,7 @@ from devtools import debug
 from gh_util.types import GitHubWebhookRequest
 from marvin.utilities.redis import get_async_redis_client
 from prefect import task
-from prefect.task_server import serve
+from prefect.task_worker import serve
 from pydantic import BaseModel
 
 

@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from prefect import task
 from fastapi_tasks import my_fastapi_task
 
 app = FastAPI()

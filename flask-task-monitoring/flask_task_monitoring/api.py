@@ -24,7 +24,7 @@ async def ask_question():
     #
     # It's important to note the parameters you pass here will never be transmitted via
     # the Prefect API.  Instead, they are stored in the common result storage area that
-    # the application and task servers share (in this example application, that is a
+    # the application and task workers share (in this example application, that is a
     # filesystem path).
     answer: TaskRun = get_help.delay(question)
 
@@ -33,7 +33,7 @@ async def ask_question():
     # database along with other application objects.  This ID is not transient and will
     # exist on the Prefect API until the task run is deleted (either manually or via
     # the retention policies on Prefect Cloud).
-    return "", 202, {"Location": f"/answer/{answer.id}"}
+    return "", 202, {"Location": f"/answer/{answer.task_run_id}"}
 
 
 @app.route("/answer/<task_run_id>", methods=["GET"])
@@ -58,7 +58,7 @@ async def get_answer(task_run_id: str):
 
     # A task run may be in one of several states.  When it is first submitted, it will
     # be in a `SCHEDULED` state.  It will then transition to a `PENDING` state when a
-    # `TaskServer` has received it (or `CRASHED` if something went wrong at this point)
+    # `TaskWorker` has received it (or `CRASHED` if something went wrong at this point)
     # The run will then move on to `RUNNING` while it is executing, arriving in the
     # final state of `COMPLETED` or `FAILED`.  If you are using
     # task retries (https://docs.prefect.io/latest/concepts/tasks/#retries), you may
@@ -71,7 +71,7 @@ async def get_answer(task_run_id: str):
         return {"state": state.name}, 202
 
     # If the task run has completed, we can retrieve the result from the common storage
-    # that the application and task servers share (in this example application, that is
+    # that the application and task workers share (in this example application, that is
     # a filesystem path).  The result is a `PersistedResult` object, which exposes
     # access to the result data.
     #
