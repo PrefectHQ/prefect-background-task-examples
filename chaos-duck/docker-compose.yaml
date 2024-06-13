@@ -1,5 +1,13 @@
-version: '3.8'
 services:
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: prefect
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: prefect
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   prefect:
     restart: always
     build:
@@ -8,7 +16,7 @@ services:
       target: production
     environment:
       PREFECT_HOME: /data
-      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:password@postgres/prefect
     command: prefect server start --host 0.0.0.0
     ports:
       - "14202:4200"
@@ -17,7 +25,7 @@ services:
       - .:/app
   tasks:
     deploy:
-      replicas: 4
+      replicas: 8
     restart: always
     build:
       context: .
@@ -26,7 +34,6 @@ services:
     environment:
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
-      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     command: python -m chaos_duck.tasks
     volumes:
       - task-storage:/task-storage
@@ -44,7 +51,6 @@ services:
     environment:
       PREFECT_API_URL: http://prefect:4200/api
       PREFECT_LOCAL_STORAGE_PATH: /task-storage
-      PREFECT_EXPERIMENTAL_ENABLE_TASK_SCHEDULING: True
     entrypoint: python -m chaos_duck
     volumes:
       # Allows for some Docker-in-Docker operations to sow chaos
@@ -54,5 +60,6 @@ services:
     depends_on:
       - prefect
 volumes:
+  postgres-data: {}
   prefect-data: {}
   task-storage: {}
