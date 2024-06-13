@@ -5,7 +5,6 @@ from collections import Counter
 from uuid import UUID
 
 from prefect.client.orchestration import get_client
-from prefect.client.schemas import TaskRun
 from prefect.client.schemas.filters import TaskRunFilter, TaskRunFilterId
 from prefect.states import StateType
 
@@ -23,8 +22,9 @@ async def main(iterations: int):
 
     task_runs: dict[UUID, int] = {}
     for i in range(iterations):
+        await asyncio.sleep(0)
         try:
-            run: TaskRun = await tasks.ping.delay(i)
+            future = tasks.ping.delay(i)
         except Exception as exc:
             print(f"Failed to submit task run {i}: {exc}")
             submission_failures += 1
@@ -37,7 +37,8 @@ async def main(iterations: int):
                 )
             else:
                 print("Submitted run", i + 1, "tasks")
-        task_runs[run.id] = i
+
+        task_runs[future.task_run_id] = i
 
     submission_duration = time.monotonic() - start
 
@@ -102,6 +103,10 @@ async def main(iterations: int):
 
     duration = time.monotonic() - start
 
+    print("Chaos:", sum(chaos.scoreboard.values()), "events")
+    for agent in sorted(chaos.scoreboard, key=chaos.scoreboard.get, reverse=True):
+        count = chaos.scoreboard[agent]
+        print(f"  {agent.__name__}: {count}")
     print("Submission failures:", submission_failures)
     print("Polling failures:", polling_failures)
     print("Tasks that retried:", len(observed_retries))

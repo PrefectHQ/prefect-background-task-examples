@@ -10,10 +10,12 @@ alembic==1.13.1
     # via prefect
 annotated-types==0.6.0
     # via pydantic
-anyio==3.7.1
+anyio==4.4.0
     # via
     #   httpx
     #   prefect
+    #   starlette
+    #   watchfiles
 apprise==1.7.4
     # via prefect
 asgi-lifespan==2.1.0
@@ -64,7 +66,13 @@ docker==6.1.3
     #   -r requirements.in
     #   prefect
 email-validator==2.1.1
-    # via pydantic
+    # via fastapi
+exceptiongroup==1.2.1
+    # via prefect
+fastapi==0.111.0
+    # via prefect
+fastapi-cli==0.0.4
+    # via fastapi
 fsspec==2024.2.0
     # via prefect
 google-auth==2.28.2
@@ -83,13 +91,20 @@ h2==4.1.0
     # via httpx
 hpack==4.0.0
     # via h2
-httpcore==1.0.4
+httpcore==1.0.5
     # via
     #   httpx
     #   prefect
+httptools==0.6.1
+    # via uvicorn
 httpx[http2]==0.27.0
     # via
+    #   fastapi
     #   httpx
+    #   prefect
+humanize==4.9.0
+    # via
+    #   jinja2-humanize-extension
     #   prefect
 hyperframe==6.0.1
     # via h2
@@ -99,9 +114,14 @@ idna==3.6
     #   email-validator
     #   httpx
     #   requests
-itsdangerous==2.1.2
+importlib-resources==6.1.3
     # via prefect
 jinja2==3.1.3
+    # via
+    #   fastapi
+    #   jinja2-humanize-extension
+    #   prefect
+jinja2-humanize-extension==0.4.0
     # via prefect
 jsonpatch==1.33
     # via prefect
@@ -130,7 +150,9 @@ oauthlib==3.2.2
     #   kubernetes
     #   requests-oauthlib
 orjson==3.9.15
-    # via prefect
+    # via
+    #   fastapi
+    #   prefect
 packaging==24.0
     # via
     #   docker
@@ -139,7 +161,7 @@ pathspec==0.12.1
     # via prefect
 pendulum==3.0.0
     # via prefect
-prefect==2.16.3
+prefect==3.0.0rc2
     # via -r requirements.in
 pyasn1==0.5.1
     # via
@@ -149,12 +171,20 @@ pyasn1-modules==0.3.0
     # via google-auth
 pycparser==2.21
     # via cffi
-pydantic[email]==2.6.4
+pydantic==2.7.4
+    # via
+    #   fastapi
+    #   prefect
+    #   pydantic-extra-types
+    #   pydantic-settings
+pydantic-core==2.18.4
     # via
     #   prefect
     #   pydantic
-pydantic-core==2.16.3
-    # via pydantic
+pydantic-extra-types==2.8.1
+    # via prefect
+pydantic-settings==2.3.3
+    # via prefect
 pygments==2.17.2
     # via rich
 python-dateutil==2.9.0.post0
@@ -165,8 +195,12 @@ python-dateutil==2.9.0.post0
     #   pendulum
     #   prefect
     #   time-machine
+python-dotenv==1.0.1
+    # via
+    #   pydantic-settings
+    #   uvicorn
 python-multipart==0.0.9
-    # via prefect
+    # via fastapi
 python-slugify==8.0.4
     # via prefect
 pytz==2024.1
@@ -179,6 +213,7 @@ pyyaml==6.0.1
     #   apprise
     #   kubernetes
     #   prefect
+    #   uvicorn
 readchar==4.0.5
     # via prefect
 referencing==0.33.0
@@ -200,7 +235,9 @@ requests-oauthlib==1.4.0
 rfc3339-validator==0.1.4
     # via prefect
 rich==13.7.1
-    # via prefect
+    # via
+    #   prefect
+    #   typer
 rpds-py==0.18.0
     # via
     #   jsonschema
@@ -211,6 +248,8 @@ ruamel-yaml==0.18.6
     # via prefect
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
+shellingham==1.5.4
+    # via typer
 six==1.16.0
     # via
     #   kubernetes
@@ -227,18 +266,23 @@ sqlalchemy[asyncio]==2.0.28
     #   alembic
     #   prefect
     #   sqlalchemy
+starlette==0.37.2
+    # via fastapi
 text-unidecode==1.3
     # via python-slugify
 time-machine==2.14.0
     # via pendulum
 toml==0.10.2
     # via prefect
-typer==0.9.0
-    # via prefect
+typer==0.12.3
+    # via
+    #   fastapi-cli
+    #   prefect
 typing-extensions==4.10.0
     # via
     #   aiosqlite
     #   alembic
+    #   fastapi
     #   prefect
     #   pydantic
     #   pydantic-core
@@ -249,20 +293,30 @@ tzdata==2024.1
 tzlocal==5.2
     # via dateparser
 ujson==5.9.0
-    # via prefect
+    # via
+    #   fastapi
+    #   prefect
 urllib3==2.2.1
     # via
     #   docker
     #   kubernetes
     #   requests
-uvicorn==0.28.0
-    # via prefect
+uvicorn[standard]==0.28.0
+    # via
+    #   fastapi
+    #   prefect
+uvloop==0.19.0
+    # via uvicorn
+watchfiles==0.22.0
+    # via uvicorn
 websocket-client==1.7.0
     # via
     #   docker
     #   kubernetes
 websockets==12.0
-    # via prefect
+    # via
+    #   prefect
+    #   uvicorn
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

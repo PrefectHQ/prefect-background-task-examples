@@ -2,7 +2,7 @@ import random
 import sys
 
 from prefect import get_run_logger, task
-from prefect.task_server import serve
+from prefect.task_worker import serve
 
 
 @task(retries=10, retry_delay_seconds=1)
