@@ -97,9 +97,7 @@ httpcore==1.0.4
     #   httpx
     #   prefect
 httpx[http2]==0.27.0
-    # via
-    #   httpx
-    #   prefect
+    # via prefect
 hyperframe==6.0.1
     # via h2
 idna==3.6
@@ -245,7 +243,6 @@ sqlalchemy[asyncio]==2.0.27
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.28.0
     # via fastapi
 text-unidecode==1.3
@@ -272,7 +269,7 @@ tzlocal==5.2
     # via dateparser
 ujson==5.9.0
     # via prefect
-urllib3==2.2.1
+urllib3==2.2.2
     # via
     #   docker
     #   kubernetes
