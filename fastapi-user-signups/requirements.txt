@@ -33,7 +33,7 @@ cachetools==5.3.3
     # via
     #   google-auth
     #   prefect
-certifi==2024.2.2
+certifi==2024.7.4
     # via
     #   apprise
     #   httpcore
@@ -97,9 +97,7 @@ httpcore==1.0.4
     #   httpx
     #   prefect
 httpx[http2]==0.27.0
-    # via
-    #   httpx
-    #   prefect
+    # via prefect
 hyperframe==6.0.1
     # via h2
 idna==3.6
@@ -245,7 +243,6 @@ sqlalchemy[asyncio]==2.0.27
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.28.0
     # via fastapi
 text-unidecode==1.3
