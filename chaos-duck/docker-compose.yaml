@@ -23,6 +23,8 @@ services:
     volumes:
       - prefect-data:/data
       - .:/app
+    depends_on:
+      - postgres
   tasks:
     deploy:
       replicas: 8
