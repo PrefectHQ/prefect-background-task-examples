@@ -1,4 +1,4 @@
-FROM python:3.12.1 as production
+FROM python:3.12.1 AS production
 
 # Clone prefect to a global directory so we can install editably from there; later, in
 # docker-compose, we can mount your local prefect repo here to test local changes.  It's
@@ -15,7 +15,7 @@ RUN pip install -e /prefect/
 WORKDIR /app
 COPY ./chaos_duck /app/chaos_duck
 
-FROM production as testing
+FROM production AS testing
 
 COPY requirements-dev.txt /tmp/requirements-dev.txt
 RUN pip install -r /tmp/requirements-dev.txt
