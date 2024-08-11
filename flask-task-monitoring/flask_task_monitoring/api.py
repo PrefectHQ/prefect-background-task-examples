@@ -2,9 +2,8 @@ from uuid import UUID
 
 from flask import Flask, request
 from prefect.client.orchestration import get_client
-from prefect.client.schemas import TaskRun
-from prefect.client.schemas.objects import State, StateType
-
+from prefect.client.schemas.objects import StateType
+from prefect.futures import PrefectDistributedFuture
 from prefect.results import PersistedResult
 
 from .tasks import get_help
@@ -26,14 +25,14 @@ async def ask_question():
     # the Prefect API.  Instead, they are stored in the common result storage area that
     # the application and task servers share (in this example application, that is a
     # filesystem path).
-    answer: TaskRun = get_help.delay(question)
+    answer: PrefectDistributedFuture = get_help.delay(question)
 
     # The ID of the task run is what we'll need to check the status of the task later,
     # so return it to the caller.  In other applications, you may store this ID in your
     # database along with other application objects.  This ID is not transient and will
     # exist on the Prefect API until the task run is deleted (either manually or via
     # the retention policies on Prefect Cloud).
-    return "", 202, {"Location": f"/answer/{answer.id}"}
+    return "", 202, {"Location": f"/answer/{answer.task_run_id}"}
 
 
 @app.route("/answer/<task_run_id>", methods=["GET"])
@@ -53,8 +52,7 @@ async def get_answer(task_run_id: str):
     if task_run.task_key != get_help.task_key:
         return "", 404
 
-    state: State = task_run.state
-    assert state
+    assert (state := task_run.state) is not None
 
     # A task run may be in one of several states.  When it is first submitted, it will
     # be in a `SCHEDULED` state.  It will then transition to a `PENDING` state when a
@@ -79,4 +77,4 @@ async def get_answer(task_run_id: str):
     # be stored or seen by the Prefect API.
     result: PersistedResult = state.result()
 
-    return await result.get(), 200, {"Content-Type": "application/text"}
+    return await result.get(), 200, {"Content-Type": "audio/mp3"}
