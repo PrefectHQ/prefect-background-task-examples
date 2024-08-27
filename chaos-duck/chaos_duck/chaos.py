@@ -36,7 +36,7 @@ async def send_a_crash_me_task():
 
 
 @agent_of_chaos(probability=0.1)
-async def kill_a_task_server():
+async def kill_a_task_worker():
     client = docker.DockerClient()
 
     containers: list[Container] = client.containers.list()

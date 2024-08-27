@@ -2,11 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-RUN pip install uv
-RUN uv venv
-ENV VIRTUAL_ENV=/app/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-RUN . .venv/bin/activate
+RUN pip install -U pip uv
 
 RUN apt-get update && \
     apt-get install -y git build-essential && \
@@ -15,4 +11,4 @@ RUN apt-get update && \
 
 COPY . /app
 
-RUN uv pip install -r requirements.txt
+RUN uv pip install --system -r requirements.txt

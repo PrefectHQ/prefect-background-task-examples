@@ -4,8 +4,8 @@ from datetime import date
 import httpx
 import jinja2
 from prefect import task
+from prefect.task_worker import serve
 from prefect.tasks import task_input_hash
-from prefect.task_server import serve
 
 from . import models
 from .models import User

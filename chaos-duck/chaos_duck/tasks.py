@@ -26,6 +26,4 @@ async def crash_me(exit_code: int):
 
 
 if __name__ == "__main__":
-    from . import tasks
-
-    serve(tasks.ping, tasks.crash_me)
+    serve(ping, crash_me)

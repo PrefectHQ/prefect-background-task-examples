@@ -3,12 +3,11 @@ from datetime import timedelta
 
 import marvin
 from prefect import task
-from prefect.task_server import serve
-from prefect.tasks import task_input_hash
+from prefect.task_worker import serve
 
 
-@marvin.ai_fn
-def answer(question: str) -> str:
+@marvin.fn
+def answer(question: str) -> str:  # noqa F821 # type: ignore
     """
     Answer the given `question` in a truthful and helpful way, returning up to two
     lines of dialogue.  If the question includes a compliment, thank the asker in a
@@ -16,17 +15,13 @@ def answer(question: str) -> str:
     """
 
 
-@marvin.ai_fn
-def retort(question: str) -> str:
+@marvin.fn
+def retort(question: str) -> str:  # noqa F821 # type: ignore
     """
     Return a retort to the given `question` in a sarcastic or otherwise unhelpful way,
     and optionally scold the person for being mean.  Definitely do not answer the
     question in any helpful way.
     """
-
-
-class HostileQuestion(Exception):
-    pass
 
 
 @task(
@@ -38,7 +33,7 @@ class HostileQuestion(Exception):
     # determined by the parameters to the task.  This means that if the same question is
     # asked multiple times within a minute, the same results will be returned without
     # making API calls to the LLM.
-    cache_key_fn=task_input_hash,
+    persist_result=True,
     cache_expiration=timedelta(seconds=60),
 )
 async def get_help(question: str) -> bytes:
@@ -51,11 +46,12 @@ async def get_help(question: str) -> bytes:
     if random.random() < 0.2:
         raise ValueError("Randomly failing, this should be retried")
 
-    # return text data response from Marvin
-    return reply
+    audio = await marvin.speak_async(reply)
+
+    # The return value of this task are the bytes of the audio file, which
+    # encode in MP3 format.
+    return audio.data
 
 
 if __name__ == "__main__":
-    from . import tasks
-
-    serve(tasks.get_help)
+    serve(get_help)

@@ -19,7 +19,7 @@ services:
       PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:password@postgres/prefect
     command: prefect server start --host 0.0.0.0
     ports:
-      - "14202:4200"
+      - "4200:4200"
     volumes:
       - prefect-data:/data
       - .:/app
@@ -44,8 +44,8 @@ services:
       - prefect
   duck:
     deploy:
-      replicas: 0
-    restart: no
+      replicas: 1
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile

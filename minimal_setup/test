@@ -1,0 +1,43 @@
+#!/bin/bash
+
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+paint() {
+    local color=$1
+    local text=$2
+    printf "${color}${text}${NC}\n"
+}
+
+trap 'kill $(jobs -p)' EXIT
+
+paint $GREEN "\n[*] Initiating tour of Prefect background tasks..."
+printf "\n"
+
+paint $BLUE "[+] Deploying some API that offloads work to background tasks..."
+printf "\n"
+uvicorn minimal_setup.api:app --host 0.0.0.0 --port 8000 &>/dev/null &
+sleep 2
+
+paint $BLUE "[+] Submitting demo payload: {'value':'dude i found the best cat meme'} ..."
+curl -s -X POST -H "Content-Type: application/json" -d '{"value":"dude i found the best cat meme"}' http://localhost:8000 | sed 's/^/    /'
+printf "\n\n"
+
+paint $BLUE "[+] Serve the background tasks to execute scheduled runs ..."
+printf "\n"
+python minimal_setup/tasks.py > /tmp/tasks.log 2>&1 &
+sleep 2
+
+paint $YELLOW "[>] Intercepted comms:"
+sed 's/^/    /' /tmp/tasks.log
+printf "\n"
+
+paint $GREEN "[*] Operation complete. Remain vigilant."
+printf "\n"
+
+paint $RED "[!] In practice, you might want a compose.yml file to define services, their relationships, and resources"
+
+paint $RED "[!] or maybe, kubernetes 😱"
