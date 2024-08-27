@@ -1,4 +1,4 @@
-prefect>=3.0.0rc13
+prefect>=3.0.0rc19
 flask[async]
 marvin>=2.3.0
 pendulum

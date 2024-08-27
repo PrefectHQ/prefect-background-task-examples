@@ -1,71 +1,40 @@
 .DEFAULT_GOAL := install
-.PHONY: all install clean test tests
+.PHONY: all install clean test tests lock sync upgrade
 
-requirements_in = $(filter-out MANIFEST.in, $(wildcard *.in))
-requirements_out := $(requirements_in:.in=.txt)
+requirements_in := requirements.in requirements-dev.in
+requirements_out := requirements.txt requirements-dev.txt
 
-PIP_VERSION=23.3.2
-PIP_TOOLS_VERSION=7.3.0
+UV_VERSION := latest
 
-all: $(requirements_out) install
+all: lock install
 
-.bookkeeping/pip-$(PIP_VERSION):
-	mkdir -p .bookkeeping && touch $@.next
-
-	python -m pip install pip==$(PIP_VERSION) wheel
-
-	mv $@.next $@
-
-.bookkeeping/pip-tools-$(PIP_TOOLS_VERSION): .bookkeeping/pip-$(PIP_VERSION)
-	mkdir -p .bookkeeping && touch $@.next
-
-	python -m pip install pip-tools==$(PIP_TOOLS_VERSION)
-
-	mv $@.next $@
-
-.PHONY: .bookkeeping/pip-tools
-.bookkeeping/pip-tools: .bookkeeping/pip-tools-$(PIP_TOOLS_VERSION)
-
-.bookkeeping/development.txt: .bookkeeping/pip-tools-$(PIP_TOOLS_VERSION) requirements-dev.txt
+.bookkeeping/uv-$(UV_VERSION):
 	mkdir -p .bookkeeping
-	cp requirements-dev.txt $@.next
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+	touch $@
 
-	pip-sync $@.next
-	docker compose build
+lock: .bookkeeping/uv-$(UV_VERSION)
+	uv pip compile requirements.in -o requirements.txt
+	uv pip compile requirements.txt requirements-dev.in -o requirements-dev.txt
 
-	mv $@.next $@
+sync: .bookkeeping/uv-$(UV_VERSION) $(requirements_out)
+	uv pip sync requirements-dev.txt
 
-requirements.txt: requirements.in .bookkeeping/pip-tools-$(PIP_TOOLS_VERSION)
-	pip-compile --no-strip-extras \
-		requirements.in --output-file $@
+install: sync
 
-requirements-dev.txt: requirements.txt requirements-dev.in
-	pip-compile --no-strip-extras \
-		requirements.txt requirements-dev.in --output-file $@
+upgrade: .bookkeeping/uv-$(UV_VERSION)
+	uv pip compile requirements.in -o requirements.txt --upgrade
+	uv pip compile requirements.txt requirements-dev.in -o requirements-dev.txt --upgrade
 
-upgrade-packages:
-	pip-compile --no-strip-extras --upgrade \
-		requirements.in --output-file requirements.txt
-	pip-compile --no-strip-extras --upgrade \
-		requirements.txt requirements-dev.in --output-file requirements-dev.txt
-
-install: .bookkeeping/development.txt
-bump: upgrade-packages all
-
-.PHONY: uninstall
 uninstall:
-	pip uninstall -y prefect prefect_cloud $$(pip freeze | grep -v 'git+')
-	rm -f .bookkeeping/development.txt
-	python -m pip install pip-tools==$(PIP_TOOLS_VERSION)
+	uv pip uninstall -y -r requirements-dev.txt
 
-.PHONY: reinstall
 reinstall: uninstall install
 
 clean:
-	rm -Rf .bookkeeping/
-
+	rm -rf .bookkeeping/
 
 tests:
-	docker compose run --rm tests
+	python -m pytest
 
 test: tests
