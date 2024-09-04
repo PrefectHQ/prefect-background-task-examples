@@ -52,7 +52,7 @@ my_background_task("Joaquim")
 my_background_task.delay("Agrajag")
 ```
 
-For documentation on the features available for tasks, refer to the [Prefect Tasks documentation](https://docs.prefect.io/concepts/tasks/).
+For documentation on the features available for tasks, refer to the [Prefect Tasks documentation](https://docs.prefect.io/3.0/develop/write-tasks/).
 
 ### Running background tasks with a task worker
 
@@ -136,7 +136,7 @@ If you're using a local Prefect server instance with a SQLite backing database (
 prefect config set PREFECT_API_URL=http://127.0.0.1:4200/api
 ```
 
-If using Prefect Cloud, set the `PREFECT_API_URL` value to the Prefect Cloud API URL and add your [API key](https://docs.prefect.io/cloud/users/api-keys/).
+If using Prefect Cloud, set the `PREFECT_API_URL` value to the Prefect Cloud API URL and add your [API key](https://docs.prefect.io/3.0/manage/cloud/manage-users/api-keys#manage-api-keys).
 
 The examples that use docker (examples 4 and 5) use a local Prefect server instance by default.
 You can switch to Prefect Cloud by changing the `PREFECT_API_URL` and adding a variable for your API key in the `docker-compose.yaml`.
@@ -171,7 +171,7 @@ Let's run some tasks!
 
 Add the `@task` decorator to any Python function to define a Prefect task.
 
-Step 1: Create a file named `greeter.py` and save the following code in it, or run the existing file in the [basic-examples directory](./basic-examples).
+Step 1: Create a file named `greeter.py` and save the following code in it:
 
 ```python
 from prefect import task 
