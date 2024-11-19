@@ -34,7 +34,7 @@ async def show_result_is_available_via_API(task, task_run, state):
     """
     from prefect import get_run_logger
 
-    get_run_logger().info(f"Actual result value: {await state.result().get()}")
+    get_run_logger().info(f"Actual result value: {await state.result()}")
 
 
 # repo event handler task
