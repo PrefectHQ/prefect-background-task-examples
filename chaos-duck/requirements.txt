@@ -95,7 +95,6 @@ httptools==0.6.1
 httpx[http2]==0.27.0
     # via
     #   fastapi
-    #   httpx
     #   prefect
 humanize==4.9.0
     # via
@@ -183,7 +182,7 @@ python-dotenv==1.0.1
     # via
     #   pydantic-settings
     #   uvicorn
-python-multipart==0.0.9
+python-multipart==0.0.18
     # via fastapi
 python-slugify==8.0.4
     # via prefect
@@ -242,7 +241,6 @@ sqlalchemy[asyncio]==2.0.28
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.37.2
     # via fastapi
 text-unidecode==1.3
