@@ -4,342 +4,54 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in requirements.txt
 #
-aiosqlite==0.20.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-alembic==1.13.2
-    # via
-    #   -r requirements.txt
-    #   prefect
-annotated-types==0.7.0
-    # via
-    #   -r requirements.txt
-    #   pydantic
 anyio==4.4.0
-    # via
-    #   -r requirements.txt
-    #   httpx
-    #   openai
-    #   prefect
-    #   starlette
-apprise==1.8.1
-    # via
-    #   -r requirements.txt
-    #   prefect
-asgi-lifespan==2.1.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-asgiref==3.8.1
-    # via
-    #   -r requirements.txt
-    #   flask
+    # via httpx
 asttokens==2.4.1
     # via stack-data
-asyncpg==0.29.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-attrs==24.2.0
-    # via
-    #   -r requirements.txt
-    #   jsonschema
-    #   referencing
-blinker==1.8.2
-    # via
-    #   -r requirements.txt
-    #   flask
-cachetools==5.4.0
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
 certifi==2024.7.4
     # via
-    #   -r requirements.txt
-    #   apprise
     #   httpcore
     #   httpx
-    #   requests
-cffi==1.17.0
-    # via
-    #   -r requirements.txt
-    #   cryptography
-charset-normalizer==3.3.2
-    # via
-    #   -r requirements.txt
-    #   requests
-click==8.1.7
-    # via
-    #   -r requirements.txt
-    #   apprise
-    #   flask
-    #   prefect
-    #   typer
-    #   uvicorn
-cloudpickle==3.0.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-colorama==0.4.6
-    # via
-    #   -r requirements.txt
-    #   griffe
-coolname==2.2.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-croniter==3.0.3
-    # via
-    #   -r requirements.txt
-    #   prefect
-cryptography==43.0.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-dateparser==1.2.0
-    # via
-    #   -r requirements.txt
-    #   prefect
 decorator==5.1.1
     # via ipython
-distro==1.9.0
-    # via
-    #   -r requirements.txt
-    #   openai
-docker==7.1.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-exceptiongroup==1.2.2
-    # via
-    #   -r requirements.txt
-    #   prefect
 execnet==2.1.1
     # via pytest-xdist
 executing==2.0.1
     # via stack-data
-fastapi==0.112.0
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
-flask[async]==3.0.3
-    # via
-    #   -r requirements.txt
-    #   flask
-fsspec==2024.6.1
-    # via
-    #   -r requirements.txt
-    #   prefect
-graphviz==0.20.3
-    # via
-    #   -r requirements.txt
-    #   prefect
-greenlet==3.0.3
-    # via
-    #   -r requirements.txt
-    #   sqlalchemy
-griffe==0.47.0
-    # via
-    #   -r requirements.txt
-    #   prefect
 h11==0.14.0
-    # via
-    #   -r requirements.txt
-    #   httpcore
-    #   uvicorn
-h2==4.1.0
-    # via
-    #   -r requirements.txt
-    #   httpx
-hpack==4.0.0
-    # via
-    #   -r requirements.txt
-    #   h2
+    # via httpcore
 httpcore==1.0.5
-    # via
-    #   -r requirements.txt
-    #   httpx
-    #   prefect
-httpx[http2]==0.27.0
-    # via
-    #   -r requirements.txt
-    #   httpx
-    #   marvin
-    #   openai
-    #   prefect
-    #   pytest-httpx
-humanize==4.10.0
-    # via
-    #   -r requirements.txt
-    #   jinja2-humanize-extension
-    #   prefect
-hyperframe==6.0.1
-    # via
-    #   -r requirements.txt
-    #   h2
+    # via httpx
+httpx==0.27.0
+    # via pytest-httpx
 idna==3.7
     # via
-    #   -r requirements.txt
     #   anyio
     #   httpx
-    #   requests
-importlib-resources==6.1.3
-    # via
-    #   -r requirements.txt
-    #   prefect
 iniconfig==2.0.0
     # via pytest
 ipython==8.26.0
     # via -r requirements-dev.in
-itsdangerous==2.2.0
-    # via
-    #   -r requirements.txt
-    #   flask
 jedi==0.19.1
     # via ipython
-jinja2==3.1.4
-    # via
-    #   -r requirements.txt
-    #   flask
-    #   jinja2-humanize-extension
-    #   marvin
-    #   prefect
-jinja2-humanize-extension==0.4.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-jiter==0.5.0
-    # via
-    #   -r requirements.txt
-    #   openai
-jsonpatch==1.33
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
-jsonpointer==3.0.0
-    # via
-    #   -r requirements.txt
-    #   jsonpatch
-jsonschema==4.23.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-jsonschema-specifications==2023.12.1
-    # via
-    #   -r requirements.txt
-    #   jsonschema
-mako==1.3.5
-    # via
-    #   -r requirements.txt
-    #   alembic
-markdown==3.6
-    # via
-    #   -r requirements.txt
-    #   apprise
-markdown-it-py==3.0.0
-    # via
-    #   -r requirements.txt
-    #   rich
-markupsafe==2.1.5
-    # via
-    #   -r requirements.txt
-    #   jinja2
-    #   mako
-    #   werkzeug
-marvin==2.3.6
-    # via -r requirements.txt
 matplotlib-inline==0.1.7
     # via ipython
-mdurl==0.1.2
-    # via
-    #   -r requirements.txt
-    #   markdown-it-py
-oauthlib==3.2.2
-    # via
-    #   -r requirements.txt
-    #   requests-oauthlib
-openai==1.40.3
-    # via
-    #   -r requirements.txt
-    #   marvin
-orjson==3.10.7
-    # via
-    #   -r requirements.txt
-    #   prefect
 packaging==24.1
-    # via
-    #   -r requirements.txt
-    #   prefect
-    #   pytest
+    # via pytest
 parso==0.8.4
     # via jedi
-partialjson==0.0.8
-    # via
-    #   -r requirements.txt
-    #   marvin
-pathspec==0.12.1
-    # via
-    #   -r requirements.txt
-    #   prefect
-pendulum==3.0.0
-    # via
-    #   -r requirements.txt
-    #   prefect
 pexpect==4.9.0
     # via ipython
 pluggy==1.5.0
     # via pytest
-prefect==3.0.0rc15
-    # via -r requirements.txt
-prometheus-client==0.20.0
-    # via
-    #   -r requirements.txt
-    #   prefect
 prompt-toolkit==3.0.47
-    # via
-    #   -r requirements.txt
-    #   ipython
-    #   marvin
+    # via ipython
 ptyprocess==0.7.0
     # via pexpect
 pure-eval==0.2.3
     # via stack-data
-pycparser==2.22
-    # via
-    #   -r requirements.txt
-    #   cffi
-pydantic==2.8.2
-    # via
-    #   -r requirements.txt
-    #   fastapi
-    #   marvin
-    #   openai
-    #   prefect
-    #   pydantic-extra-types
-    #   pydantic-settings
-pydantic-core==2.20.1
-    # via
-    #   -r requirements.txt
-    #   prefect
-    #   pydantic
-pydantic-extra-types==2.9.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-pydantic-settings==2.4.0
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
 pygments==2.18.0
-    # via
-    #   -r requirements.txt
-    #   ipython
-    #   rich
+    # via ipython
 pytest==8.3.2
     # via
     #   -r requirements-dev.in
@@ -352,187 +64,19 @@ pytest-httpx==0.30.0
     # via -r requirements-dev.in
 pytest-xdist==3.6.1
     # via -r requirements-dev.in
-python-dateutil==2.9.0.post0
-    # via
-    #   -r requirements.txt
-    #   croniter
-    #   dateparser
-    #   pendulum
-    #   prefect
-    #   time-machine
-python-dotenv==1.0.1
-    # via
-    #   -r requirements.txt
-    #   pydantic-settings
-python-slugify==8.0.4
-    # via
-    #   -r requirements.txt
-    #   prefect
-pytz==2024.1
-    # via
-    #   -r requirements.txt
-    #   croniter
-    #   dateparser
-    #   prefect
-pyyaml==6.0.2
-    # via
-    #   -r requirements.txt
-    #   apprise
-    #   prefect
-readchar==4.1.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-referencing==0.35.1
-    # via
-    #   -r requirements.txt
-    #   jsonschema
-    #   jsonschema-specifications
-regex==2024.7.24
-    # via
-    #   -r requirements.txt
-    #   dateparser
-    #   tiktoken
-requests==2.32.3
-    # via
-    #   -r requirements.txt
-    #   apprise
-    #   docker
-    #   requests-oauthlib
-    #   tiktoken
-requests-oauthlib==2.0.0
-    # via
-    #   -r requirements.txt
-    #   apprise
-rfc3339-validator==0.1.4
-    # via
-    #   -r requirements.txt
-    #   prefect
-rich==13.7.1
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
-    #   typer
-rpds-py==0.20.0
-    # via
-    #   -r requirements.txt
-    #   jsonschema
-    #   referencing
-ruamel-yaml==0.18.6
-    # via
-    #   -r requirements.txt
-    #   prefect
-ruamel-yaml-clib==0.2.8
-    # via
-    #   -r requirements.txt
-    #   ruamel-yaml
 ruff==0.5.7
     # via -r requirements-dev.in
-shellingham==1.5.4
-    # via
-    #   -r requirements.txt
-    #   typer
 six==1.16.0
-    # via
-    #   -r requirements.txt
-    #   asttokens
-    #   python-dateutil
-    #   rfc3339-validator
+    # via asttokens
 sniffio==1.3.1
     # via
-    #   -r requirements.txt
     #   anyio
-    #   asgi-lifespan
     #   httpx
-    #   openai
-    #   prefect
-sqlalchemy[asyncio]==2.0.32
-    # via
-    #   -r requirements.txt
-    #   alembic
-    #   prefect
-    #   sqlalchemy
 stack-data==0.6.3
     # via ipython
-starlette==0.37.2
-    # via
-    #   -r requirements.txt
-    #   fastapi
-text-unidecode==1.3
-    # via
-    #   -r requirements.txt
-    #   python-slugify
-tiktoken==0.7.0
-    # via
-    #   -r requirements.txt
-    #   marvin
-time-machine==2.15.0
-    # via
-    #   -r requirements.txt
-    #   pendulum
-toml==0.10.2
-    # via
-    #   -r requirements.txt
-    #   prefect
-tqdm==4.66.5
-    # via
-    #   -r requirements.txt
-    #   openai
 traitlets==5.14.3
     # via
     #   ipython
     #   matplotlib-inline
-typer==0.12.3
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
-typing-extensions==4.12.2
-    # via
-    #   -r requirements.txt
-    #   aiosqlite
-    #   alembic
-    #   fastapi
-    #   marvin
-    #   openai
-    #   prefect
-    #   pydantic
-    #   pydantic-core
-    #   sqlalchemy
-    #   typer
-tzdata==2024.1
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   pendulum
-tzlocal==5.2
-    # via
-    #   -r requirements.txt
-    #   dateparser
-ujson==5.10.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-urllib3==2.2.2
-    # via
-    #   -r requirements.txt
-    #   docker
-    #   requests
-uvicorn==0.30.5
-    # via
-    #   -r requirements.txt
-    #   marvin
-    #   prefect
 wcwidth==0.2.13
-    # via
-    #   -r requirements.txt
-    #   prompt-toolkit
-websockets==12.0
-    # via
-    #   -r requirements.txt
-    #   prefect
-werkzeug==3.0.3
-    # via
-    #   -r requirements.txt
-    #   flask
+    # via prompt-toolkit
