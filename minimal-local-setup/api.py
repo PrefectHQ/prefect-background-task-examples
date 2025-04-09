@@ -3,7 +3,7 @@ from typing import Any
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from .tasks import some_work
+from tasks import some_work
 
 app = FastAPI()
 
