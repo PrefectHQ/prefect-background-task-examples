@@ -1,0 +1,55 @@
+#! /bin/bash
+
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+LOG_FILE="/tmp/tasks.log"
+API_LOG_FILE="/tmp/api.log"
+RUN_DURATION=3
+
+rm -f $LOG_FILE $API_LOG_FILE
+
+paint() {
+    local color=$1
+    local text=$2
+    printf "${color}${text}${NC}\n"
+}
+
+cleanup() {
+    paint $YELLOW "\n[*] Cleaning up background processes..."
+    if [ -n "$API_PID" ] && kill -0 $API_PID 2>/dev/null; then kill $API_PID; fi
+    if [ -n "$TASK_PID" ] && kill -0 $TASK_PID 2>/dev/null; then kill $TASK_PID; fi
+    paint $YELLOW "[*] Cleanup complete."
+}
+trap cleanup EXIT INT TERM
+
+paint $BLUE "[+] Starting API server (background)... Logging to $API_LOG_FILE"
+uv run --with-requirements requirements.txt uvicorn api:app --host 0.0.0.0 --port 8000 > $API_LOG_FILE 2>&1 &
+API_PID=$!
+
+paint $BLUE "[+] Starting task worker (background)... Logging to $LOG_FILE"
+uv run --with-requirements requirements.txt tasks.py > $LOG_FILE 2>&1 &
+TASK_PID=$!
+
+sleep 3.0
+
+paint $BLUE "[+] Submitting job via curl..."
+curl -s -X POST -H "Content-Type: application/json" -d '{"value":"dude i found the best cat meme"}' http://localhost:8000 | sed 's/^/    /'
+
+paint $YELLOW "\n[*] Letting processes run for ${RUN_DURATION} seconds..."
+sleep ${RUN_DURATION}
+
+paint $YELLOW "\n[!] Times up! Stopping processes..."
+kill $API_PID 2>/dev/null
+kill $TASK_PID 2>/dev/null
+
+sleep 0.5
+
+paint $YELLOW "\n[>] Final API server log contents ($API_LOG_FILE):"
+cat $API_LOG_FILE | sed 's/^/    /'
+
+paint $YELLOW "\n[>] Final task worker log contents ($LOG_FILE):"
+cat $LOG_FILE | sed 's/^/    /'

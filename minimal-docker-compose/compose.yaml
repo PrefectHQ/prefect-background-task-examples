@@ -1,0 +1,65 @@
+services:
+  prefect-db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=prefect
+      - POSTGRES_PASSWORD=prefect
+      - POSTGRES_DB=prefect
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  prefect-server:
+    image: prefecthq/prefect:3.3.3-python3.13
+    restart: always
+    command: prefect server start
+    ports:
+      - "4200:4200"
+    depends_on:
+      - prefect-db
+    environment:
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_SERVER_DATABASE_CONNECTION_URL=postgresql+asyncpg://prefect:prefect@prefect-db:5432/prefect
+
+  tasks:
+    image: prefecthq/prefect:3.3.3-python3.13
+    command: uv run -m tasks
+    environment:
+      - PREFECT_API_URL=http://prefect-server:4200/api/
+      - PREFECT_LOCAL_STORAGE_PATH=/task-storage
+      - PREFECT_TASK_SCHEDULING_DEFAULT_STORAGE_BLOCK=local-file-system/repo-activites
+      - PYTHONPATH=/app
+    depends_on:
+      prefect-server:
+        condition: service_started
+
+    volumes:
+      - task-storage:/task-storage
+      - ./:/app
+
+  api:
+    restart: always
+    image: prefecthq/prefect:3.3.3-python3.13
+    command: uv run -m main
+    ports:
+      - "8000:8000"
+    depends_on:
+      tasks:
+        condition: service_started
+    environment:
+      - PREFECT_API_URL=http://prefect-server:4200/api/
+      - PREFECT_LOCAL_STORAGE_PATH=/task-storage
+      - PREFECT_TASK_SCHEDULING_DEFAULT_STORAGE_BLOCK=local-file-system/repo-activites
+      - PYTHONPATH=/app
+    volumes:
+      - task-storage:/task-storage
+      - ./:/app
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 2s
+      timeout: 2s
+      retries: 3
+
+volumes:
+  task-storage: {}
+  postgres_data: {}
