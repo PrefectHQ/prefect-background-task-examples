@@ -34,7 +34,7 @@ certifi==2024.2.2
     #   httpcore
     #   httpx
     #   requests
-cffi==1.16.0
+cffi==2.0.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
@@ -52,7 +52,7 @@ coolname==2.2.0
     # via prefect
 croniter==2.0.2
     # via prefect
-cryptography==42.0.5
+cryptography==46.0.5
     # via prefect
 dateparser==1.2.0
     # via prefect
@@ -95,7 +95,6 @@ httptools==0.6.1
 httpx[http2]==0.27.0
     # via
     #   fastapi
-    #   httpx
     #   prefect
 humanize==4.9.0
     # via
@@ -242,7 +241,6 @@ sqlalchemy[asyncio]==2.0.28
     # via
     #   alembic
     #   prefect
-    #   sqlalchemy
 starlette==0.37.2
     # via fastapi
 text-unidecode==1.3
